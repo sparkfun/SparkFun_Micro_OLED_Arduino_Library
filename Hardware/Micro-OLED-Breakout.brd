@@ -56,7 +56,7 @@
 <layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
 <layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
-<layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
 <layer number="51" name="tDocu" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
@@ -143,12 +143,12 @@
 <wire x1="-10.16" y1="10.16" x2="10.16" y2="10.16" width="0.2032" layer="20"/>
 <wire x1="10.16" y1="10.16" x2="10.16" y2="-10.16" width="0.2032" layer="20"/>
 <wire x1="10.16" y1="-10.16" x2="-10.16" y2="-10.16" width="0.2032" layer="20"/>
-<text x="-5.334" y="0.381" size="0.889" layer="22" font="vector" ratio="15" rot="MR180" align="center">BS2</text>
-<text x="-1.397" y="0.381" size="0.889" layer="22" font="vector" ratio="15" rot="MR0" align="center">BS1</text>
+<text x="-5.334" y="0.381" size="0.889" layer="22" font="vector" ratio="15" rot="MR180" align="center">BS1</text>
+<text x="-1.397" y="0.381" size="0.889" layer="22" font="vector" ratio="15" rot="MR0" align="center">BS2</text>
 <text x="-3.302" y="1.651" size="0.889" layer="22" font="vector" ratio="15" rot="MR0" align="center">0</text>
 <text x="-3.302" y="3.302" size="0.889" layer="22" font="vector" ratio="15" rot="MR0" align="center">1</text>
 <text x="8.89" y="-19.05" size="1.778" layer="51" ratio="15">Jim Lindblom</text>
-<text x="-8.763" y="3.302" size="1.016" layer="1" font="vector" ratio="15" rot="R90">v02</text>
+<text x="-8.763" y="3.302" size="1.016" layer="1" font="vector" ratio="15" rot="R90">v03</text>
 <text x="3.556" y="3.048" size="0.889" layer="22" font="vector" ratio="15" rot="MR0" align="center-right">D1</text>
 <text x="3.556" y="2.032" size="0.889" layer="22" font="vector" ratio="15" rot="MR0" align="center-right">D2</text>
 <text x="-8.89" y="7.874" size="1.016" layer="21" font="vector" ratio="15" rot="R90" align="center-right">CS</text>
@@ -194,6 +194,7 @@ Breakout</text>
 <wire x1="-2.286" y1="1.651" x2="-2.667" y2="1.651" width="0.1778" layer="22"/>
 <wire x1="-4.064" y1="3.302" x2="-3.683" y2="3.302" width="0.1778" layer="22"/>
 <wire x1="-4.064" y1="1.651" x2="-3.683" y2="1.651" width="0.1778" layer="22"/>
+<wire x1="-2.159" y1="-5.715" x2="-2.921" y2="-5.715" width="0.254" layer="30"/>
 </plain>
 <libraries>
 <library name="microView-temp">
@@ -805,10 +806,11 @@ design rules under a new name.</description>
 <element name="JP1" library="SparkFun-Connectors" package="1X08_PIN1_NO_SILK" value="" x="8.89" y="8.89" rot="R180"/>
 <element name="TP1" library="SparkFun-Passives" package="PAD.03X.05" value="TEST-POINT3X5" x="7.62" y="1.27" rot="MR0"/>
 <element name="C6" library="SparkFun-Passives" package="0603-CAP" value="1uF" x="-3.81" y="-2.54" rot="MR90"/>
-<element name="SJ1" library="SparkFun-Passives" package="PAD-JUMPER-3-2OF3_NC_BY_PASTE_YES_SILK_FULL_BOX" value="BS1" x="-1.27" y="2.54" rot="MR270"/>
-<element name="SJ2" library="SparkFun-Passives" package="PAD-JUMPER-3-2OF3_NC_BY_PASTE_YES_SILK_FULL_BOX" value="BS2" x="-5.08" y="2.54" rot="MR270"/>
+<element name="SJ1" library="SparkFun-Passives" package="PAD-JUMPER-3-2OF3_NC_BY_PASTE_YES_SILK_FULL_BOX" value="BS1" x="-5.08" y="2.54" rot="MR270"/>
+<element name="SJ2" library="SparkFun-Passives" package="PAD-JUMPER-3-2OF3_NC_BY_PASTE_YES_SILK_FULL_BOX" value="BS2" x="-1.27" y="2.54" rot="MR270"/>
 <element name="LOGO3" library="SparkFun-Aesthetics" package="OSHW-LOGO-S" value="OSHW-LOGOS" x="8.509" y="3.175" rot="MR270"/>
 <element name="LOGO4" library="SparkFun-Aesthetics" package="SFE_LOGO_FLAME_.1" value="SFE_LOGO_FLAME.1_INCH" x="-6.985" y="1.016" rot="MR0"/>
+<element name="TP2" library="SparkFun-Passives" package="PAD.03X.05" value="TEST-POINT3X5" x="7.62" y="1.27"/>
 </elements>
 <signals>
 <signal name="GND">
@@ -842,24 +844,24 @@ design rules under a new name.</description>
 <contactref element="SJ2" pad="3"/>
 </signal>
 <signal name="BS1">
-<contactref element="OLED1" pad="10"/>
-<wire x1="-3.04" y1="-3.048" x2="-3.04" y2="0.008" width="0.254" layer="1"/>
-<via x="-2.54" y="0.508" extent="1-16" drill="0.508"/>
-<wire x1="-3.04" y1="0.008" x2="-2.54" y2="0.508" width="0.254" layer="1"/>
-<wire x1="-2.54" y1="2.286" x2="-2.286" y2="2.54" width="0.254" layer="16"/>
-<wire x1="-2.54" y1="0.508" x2="-2.54" y2="2.286" width="0.254" layer="16"/>
 <contactref element="SJ1" pad="2"/>
-<wire x1="-2.286" y1="2.54" x2="-1.27" y2="2.54" width="0.254" layer="16"/>
-</signal>
-<signal name="BS2">
 <contactref element="OLED1" pad="9"/>
 <wire x1="-3.69" y1="-3.048" x2="-3.69" y2="0.388" width="0.254" layer="1"/>
 <wire x1="-3.69" y1="0.388" x2="-3.81" y2="0.508" width="0.254" layer="1"/>
 <via x="-3.81" y="0.508" extent="1-16" drill="0.508"/>
 <wire x1="-4.191" y1="2.54" x2="-3.81" y2="2.159" width="0.254" layer="16"/>
 <wire x1="-3.81" y1="2.159" x2="-3.81" y2="0.508" width="0.254" layer="16"/>
+<wire x1="-5.08" y1="2.54" x2="-4.191" y2="2.54" width="0.254" layer="16"/>
+</signal>
+<signal name="BS2">
 <contactref element="SJ2" pad="2"/>
-<wire x1="-4.191" y1="2.54" x2="-5.08" y2="2.54" width="0.254" layer="16"/>
+<contactref element="OLED1" pad="10"/>
+<wire x1="-3.04" y1="-3.048" x2="-3.04" y2="0.008" width="0.254" layer="1"/>
+<via x="-2.54" y="0.508" extent="1-16" drill="0.508"/>
+<wire x1="-3.04" y1="0.008" x2="-2.54" y2="0.508" width="0.254" layer="1"/>
+<wire x1="-2.54" y1="2.286" x2="-2.286" y2="2.54" width="0.254" layer="16"/>
+<wire x1="-2.54" y1="0.508" x2="-2.54" y2="2.286" width="0.254" layer="16"/>
+<wire x1="-2.286" y1="2.54" x2="-1.27" y2="2.54" width="0.254" layer="16"/>
 </signal>
 <signal name="VDD">
 <contactref element="C4" pad="1"/>
@@ -1072,6 +1074,7 @@ design rules under a new name.</description>
 <wire x1="7.62" y1="-1.27" x2="7.62" y2="1.27" width="0.254" layer="1"/>
 <wire x1="8.89" y1="-1.64" x2="7.62" y2="-0.37" width="0.254" layer="16"/>
 <wire x1="7.62" y1="-0.37" x2="7.62" y2="1.27" width="0.254" layer="16"/>
+<contactref element="TP2" pad="P$1"/>
 </signal>
 <signal name="VDD_PU">
 <contactref element="R2" pad="1"/>
@@ -1079,8 +1082,8 @@ design rules under a new name.</description>
 <wire x1="1.27" y1="1.651" x2="1.27" y2="-1.69" width="0.254" layer="16"/>
 <contactref element="SJ1" pad="1"/>
 <contactref element="SJ2" pad="1"/>
-<wire x1="-5.08" y1="3.3528" x2="-1.27" y2="3.3528" width="0.254" layer="16"/>
 <wire x1="-0.4318" y1="3.3528" x2="-1.27" y2="3.3528" width="0.254" layer="16"/>
+<wire x1="-1.27" y1="3.3528" x2="-5.08" y2="3.3528" width="0.254" layer="16"/>
 </signal>
 </signals>
 <errors>
@@ -1174,8 +1177,9 @@ design rules under a new name.</description>
 <approved hash="19,16,e091b565a9a1fc55"/>
 <approved hash="19,16,2d0e58fa58f62d02"/>
 <approved hash="3,1,2b3b07234874646c"/>
-<approved hash="5,16,ed1cca42ac61d8c8"/>
+<approved hash="19,1,d633a3c7a64ad3be"/>
 <approved hash="5,16,ed1cce4aa859d8f8"/>
+<approved hash="5,16,ed1cca42ac61d8c8"/>
 <approved hash="19,16,798d1e2b2981212d"/>
 <approved hash="19,16,c9d2c3975d283ba5"/>
 <approved hash="19,16,a7d7de347a836fa8"/>
