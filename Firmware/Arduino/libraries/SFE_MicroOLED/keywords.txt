@@ -1,16 +1,12 @@
 #######################################
-# Syntax Coloring Map For MicroView
+# Syntax Coloring Map For SFE_MicroOLED
 #######################################
 
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
 
-MICROVIEW	KEYWORD1
-uView	KEYWORD1
-MicroViewWidget	KEYWORD1
-MicroViewSlider	KEYWORD1
-MicroViewGauge	KEYWORD1
+MicroOLED	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -74,8 +70,5 @@ NORM	LITERAL1
 XOR	LITERAL1
 PAGE	LITERAL1
 ALL	LITERAL1
-WIDGETSTYLE0	LITERAL1
-WIDGETSTYLE1	LITERAL1
-WIDGETSTYLE2	LITERAL1
 
 

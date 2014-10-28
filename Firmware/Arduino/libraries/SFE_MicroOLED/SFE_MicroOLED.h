@@ -1,20 +1,34 @@
-/*
-    MicroView Arduino Library
-    Copyright (C) 2014 GeekAmmo
+/****************************************************************************** 
+SFE_MicroOLED.h
+Header file for the MicroOLED Arduino Library
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+Jim Lindblom @ SparkFun Electronics
+October 26, 2014
+https://github.com/sparkfun/Micro_OLED_Breakout/tree/master/Firmware/Arduino/libraries/SFE_MicroOLED
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+This file defines the hardware interface(s) for the Micro OLED Breakout. Those
+interfaces include SPI, I2C and a parallel bus.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+Development environment specifics:
+Arduino 1.0.5
+Arduino Pro 3.3V
+Micro OLED Breakout v1.0
+
+This code was heavily based around the MicroView library, written by GeekAmmo
+(https://github.com/geekammo/MicroView-Arduino-Library), and released under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or (at your option) any later 
+version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
+
 #ifndef SFE_MICROOLED_H
 #define SFE_MICROOLED_H
 
@@ -24,20 +38,10 @@
 
 #define swap(a, b) { uint8_t t = a; a = b; b = t; }
 
-#define DC_DEFAULT		8
-#define RST_DEFAULT		7
-#define CS_DEFAULT		10
-#define MODE_DEFAULT	MODE_SPI
-
 #define I2C_ADDRESS_SA0_0 0b0111100
 #define I2C_ADDRESS_SA0_1 0b0111101
 #define I2C_COMMAND 0x00
 #define I2C_DATA 0x40
-
-// SS, SCK, MOSI already defined by original pins_arduino.h
-//#define CS 		10
-//#define SCK		13
-//#define MOSI	11
 
 #define BLACK 0
 #define WHITE 1
@@ -117,20 +121,17 @@ typedef enum COMM_MODE{
 	MODE_PARALLEL
 } micro_oled_mode;
 
-class MicroView : public Print{
+class MicroOLED : public Print{
 public:
-	//MicroView(void);
-	MicroView(micro_oled_mode mode = MODE_DEFAULT, uint8_t rst = RST_DEFAULT, uint8_t dc = DC_DEFAULT, uint8_t cs = CS_DEFAULT);
+	// Constructor(s)
+	MicroOLED(uint8_t rst, uint8_t dc, uint8_t cs);
+	MicroOLED(uint8_t rst, uint8_t dc);
+	MicroOLED(uint8_t rst, uint8_t dc, uint8_t cs, uint8_t wr, uint8_t rd, 
+			  uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, 
+			  uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
 	
 	void begin(void);
-
-//#if ARDUINO >= 100
-
 	virtual size_t write(uint8_t);
-
-//#else
-//	virtual void   write(uint8_t);
-//#endif
 
 	// RAW LCD functions
 	void command(uint8_t c);
@@ -187,27 +188,19 @@ public:
 	void flipVertical(boolean flip);
 	void flipHorizontal(boolean flip);
 	
-	//void doCmd(uint8_t index);
-	
 private:
 	uint8_t csPin, dcPin, rstPin;
 	uint8_t wrPin, rdPin, dPins[8];
 	volatile uint8_t *wrport, *wrreg, *rdport, *rdreg;
 	uint8_t wrpinmask, rdpinmask;
 	micro_oled_mode interface;
-	//volatile uint8_t *mosiport, *sckport;
+	byte i2c_address;
 	volatile uint8_t *ssport, *dcport, *ssreg, *dcreg;	// use volatile because these are fixed location port address
 	uint8_t mosipinmask, sckpinmask, sspinmask, dcpinmask;
 	uint8_t foreColor,drawMode,fontWidth, fontHeight, fontType, fontStartChar, fontTotalChar, cursorX, cursorY;
 	uint16_t fontMapWidth;
-	//unsigned char *fontsPointer[TOTALFONTS];
 	static const unsigned char *fontsPointer[];
 	
-	void setup(micro_oled_mode mode, uint8_t rst, uint8_t dc, uint8_t cs);
-	void setup(micro_oled_mode mode, uint8_t rst, uint8_t dc, uint8_t cs,
-                      uint8_t wr, uint8_t rd, uint8_t d0, uint8_t d1, uint8_t d2, 
-					  uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
-					  
 	// Communication
 	void spiTransfer(byte data);
 	void spiSetup();
@@ -216,57 +209,4 @@ private:
 	void parallelSetup();
 	void parallelWrite(byte data, byte dc);
 };
-
-/*#define SPI_CLOCK_DIV4 0x00
-#define SPI_CLOCK_DIV16 0x01
-#define SPI_CLOCK_DIV64 0x02
-#define SPI_CLOCK_DIV128 0x03
-#define SPI_CLOCK_DIV2 0x04
-#define SPI_CLOCK_DIV8 0x05
-#define SPI_CLOCK_DIV32 0x06
-//#define SPI_CLOCK_DIV64 0x07
-
-#define SPI_MODE0 0x00
-#define SPI_MODE1 0x04
-#define SPI_MODE2 0x08
-#define SPI_MODE3 0x0C
-
-#define SPI_MODE_MASK 0x0C  // CPOL = bit 3, CPHA = bit 2 on SPCR
-#define SPI_CLOCK_MASK 0x03  // SPR1 = bit 1, SPR0 = bit 0 on SPCR
-#define SPI_2XCLOCK_MASK 0x01  // SPI2X = bit 0 on SPSR
-
-class MVSPIClass {
-public:
-brief Transfer data byte via SPI port. 
-  inline static byte transfer(byte _data);
-
-  // SPI Configuration methods
-
-  inline static void attachInterrupt();
-  inline static void detachInterrupt(); // Default
-
-  static void begin(); // Default
-  static void end();
-
-  static void setBitOrder(uint8_t);
-  static void setDataMode(uint8_t);
-  static void setClockDivider(uint8_t);
-};
-
-//extern MVSPIClass MVSPI;
-
-byte MVSPIClass::transfer(byte _data) {
-  SPDR = _data;
-  while (!(SPSR & _BV(SPIF)))
-    ;
-  return SPDR;
-}
-
-void MVSPIClass::attachInterrupt() {
-  SPCR |= _BV(SPIE);
-}
-
-void MVSPIClass::detachInterrupt() {
-  SPCR &= ~_BV(SPIE);
-}*/
 #endif
