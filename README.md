@@ -2,7 +2,7 @@ Micro OLED Breakout
 ===================
 
 [![Micro OLED Breakout](https://cdn.sparkfun.com/r/600-600/assets/learn_tutorials/3/0/8/Micro_LED_Tutorial-02.jpg)
-*Micro OLED Breakout (LCD-13003)*](https://www.sparkfun.com/products/13003)
+<br>*Micro OLED Breakout (LCD-13003)*](https://www.sparkfun.com/products/13003)
 
 The Micro OLED Breakout Board breaks out a small monochrome, blue-on-black OLED. It’s “micro”, but it still packs a punch – the OLED display is crisp, and you can fit a deceivingly large amount of graphics on there. This breakout is perfect for adding graphics to your next Arduino project, displaying diagnostic information without resorting to serial output, and teaching a little game theory while creating a fun, Arduino-based video game. Most important of all, though, is the Micro OLED is easy to control over either an SPI or I2C interface.
 
