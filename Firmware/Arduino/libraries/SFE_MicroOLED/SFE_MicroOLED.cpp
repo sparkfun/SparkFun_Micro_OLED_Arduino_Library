@@ -906,3 +906,20 @@ void MicroOLED::flipHorizontal(boolean flip) {
 		command(SEGREMAP | 0x1);
 	}
 }
+
+/*
+	Return a pointer to the start of the RAM screen buffer for direct access.
+*/
+uint8_t *MicroOLED::getScreenBuffer(void) {
+	return screenmemory;
+}
+
+/*
+Draw Bitmap image on screen. The array for the bitmap can be stored in the Arduino file, so user don't have to mess with the library files. 
+To use, create uint8_t array that is 64x48 pixels (384 bytes). Then call .drawBitmap and pass it the array. 
+*/	
+void MicroOLED::drawBitmap(uint8_t * bitArray)
+{
+  for (int i=0; i<(LCDWIDTH * LCDHEIGHT / 8); i++)
+    screenmemory[i] = bitArray[i];
+}
