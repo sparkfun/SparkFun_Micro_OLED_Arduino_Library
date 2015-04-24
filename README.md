@@ -1,7 +1,7 @@
 SparkFun Micro OLED Breakout Arduino Library
 ========================================
 
-![SparkFun Micro OLED Breakout](https://www.sparkfun.com/products/13003)
+![SparkFun Micro OLED Breakout](https://cdn.sparkfun.com//assets/parts/9/9/5/6/OLED_Action.jpg)
 
 [*SparkFun Micro OLED Breakout (LCD-13003)*](https://www.sparkfun.com/products/13003)
 
