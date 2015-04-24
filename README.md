@@ -1,18 +1,45 @@
-Micro OLED Breakout
-===================
+SparkFun Micro OLED Breakout Arduino Library
+========================================
 
-[![Micro OLED Breakout](https://cdn.sparkfun.com/r/600-600/assets/learn_tutorials/3/0/8/Micro_LED_Tutorial-02.jpg)
-<br>*Micro OLED Breakout (LCD-13003)*](https://www.sparkfun.com/products/13003)
+![SparkFun Micro OLED Breakout](https://www.sparkfun.com/products/13003)
 
-The Micro OLED Breakout Board breaks out a small monochrome, blue-on-black OLED. It’s “micro”, but it still packs a punch – the OLED display is crisp, and you can fit a deceivingly large amount of graphics on there. This breakout is perfect for adding graphics to your next Arduino project, displaying diagnostic information without resorting to serial output, and teaching a little game theory while creating a fun, Arduino-based video game. Most important of all, though, is the Micro OLED is easy to control over either an SPI or I2C interface.
+[*SparkFun Micro OLED Breakout (LCD-13003)*](https://www.sparkfun.com/products/13003)
+
+An Arduino library that allows you to draw shapes and text on the Micro OLED display.
 
 Repository Contents
 -------------------
-* **/Firmware** - Arduino library and example sketches.
-* **/Hardware** - All Eagle design files (.brd, .sch)
-* **/Production** - Test bed files and production panel files
+
+* **/examples** - Example sketches for the library (.ino). Run these from the Arduino IDE.
+* **/extras** - Additional documentation for the user. These files are ignored by the IDE.
+* **/src** - Source files for the library (.cpp, .h).
+* **keywords.txt** - Keywords from this library that will be highlighted in the Arduino IDE.
+* **library.properties** - General library properties for the Arduino package manager.
+
+Documentation
+--------------
+
+* **[Installing an Arduino Library Guide](https://learn.sparkfun.com/tutorials/installing-an-arduino-library)** - Basic information on how to install an Arduino library.
+* **[Product Repository](https://github.com/sparkfun/Micro_OLED_Breakout)** - Main repository (including hardware files) for the Micro OLED Breakout.
+* **[Hookup Guide](https://learn.sparkfun.com/tutorials/micro-oled-breakout-hookup-guide)** - Basic hookup guide for the Micro OLED Breakout.
+
+Products that use this Library
+---------------------------------
+
+* [Micro OLED Breakout](https://www.sparkfun.com/products/13003)- A breakout for the monochrome 64x48 OLED.
+
+Version History
+---------------
+
+* [TODO](TODO) - Description
 
 License Information
 -------------------
-The hardware is released under [Creative Commons Share-alike 3.0](http://creativecommons.org/licenses/by-sa/3.0/).  
-All other code is open source so please feel free to do anything you want with it; you buy me a beer if you use this and we meet someday ([Beerware license](http://en.wikipedia.org/wiki/Beerware)).
+
+This product is _**open source**_!
+
+The **code** is released under the GPL v3 license. See the included LICENSE.md for more information.
+
+Distributed as-is; no warranty is given.
+
+- Your friends at SparkFun.
