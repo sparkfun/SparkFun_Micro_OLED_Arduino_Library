@@ -178,10 +178,6 @@ void MicroOLED::begin()
 	setDrawMode(NORM);
 	setCursor(0,0);
 
-	dcport	= portOutputRegister(digitalPinToPort(dcPin));
-	dcpinmask	= digitalPinToBitMask(dcPin);
-	dcreg	= portModeRegister(digitalPinToPort(dcPin));
-
 	pinMode(dcPin, OUTPUT);
 	pinMode(rstPin, OUTPUT);
 
@@ -251,10 +247,8 @@ void MicroOLED::command(uint8_t c) {
 
 	if (interface == MODE_SPI)
 	{
-		*dcport &= ~dcpinmask;	// DC pin LOW for a command
-		*ssport &= ~sspinmask;	// SS LOW to initialize transfer
+		digitalWrite(dcPin, LOW);;	// DC pin LOW for a command
 		spiTransfer(c);			// Transfer the command byte
-		*ssport |= sspinmask;	// SS HIGH to end transfer
 	}
 	else if (interface == MODE_I2C)
 	{
@@ -280,11 +274,9 @@ void MicroOLED::data(uint8_t c) {
 
 	if (interface == MODE_SPI)
 	{
-		*dcport |= dcpinmask;	// DC HIGH for a data byte
+		digitalWrite(dcPin, HIGH);	// DC HIGH for a data byte
 
-		*ssport &= ~sspinmask;	// SS LOW to initialize SPI transfer
 		spiTransfer(c); 		// Transfer the data byte
-		*ssport |= sspinmask;	// SS HIGH to end SPI transfer
 	}
 	else if (interface == MODE_I2C)
 	{
