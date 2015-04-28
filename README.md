@@ -31,7 +31,8 @@ Products that use this Library
 Version History
 ---------------
 
-* [TODO](TODO) - Description
+* [v 1.1.0](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/tree/V_1.1.0) - Changed to remove register level pin access, for cross-platform compatibility
+* [V 1.0.0](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/tree/V_1.0.0) - Initial release
 
 License Information
 -------------------
