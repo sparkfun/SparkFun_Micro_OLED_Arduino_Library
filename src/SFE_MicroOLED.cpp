@@ -28,8 +28,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
-
-#include <avr/pgmspace.h>
+#include <Arduino.h>
+#ifdef __AVR__
+	#include <avr/pgmspace.h>
+#else
+	#include <pgmspace.h>
+#endif
 #include <SFE_MicroOLED.h>
 
 // This fixed ugly GCC warning "only initialized variables can be placed into program memory area"

@@ -34,7 +34,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <stdio.h>
 #include <Arduino.h>
-#include <avr/pgmspace.h>
+
+#ifdef __AVR__
+	#include <avr/pgmspace.h>
+#else
+	#include <pgmspace.h>
+#endif
 
 #define swap(a, b) { uint8_t t = a; a = b; b = t; }
 
