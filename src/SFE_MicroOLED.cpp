@@ -6,6 +6,11 @@ Jim Lindblom @ SparkFun Electronics
 October 26, 2014
 https://github.com/sparkfun/Micro_OLED_Breakout/tree/master/Firmware/Arduino/libraries/SFE_MicroOLED
 
+Modified by:
+Emil Varughese @ Edwin Robotics Pvt. Ltd.
+July 27, 2015
+https://github.com/emil01/SparkFun_Micro_OLED_Arduino_Library/
+
 This file defines the hardware interface(s) for the Micro OLED Breakout. Those
 interfaces include SPI, I2C and a parallel bus.
 
@@ -28,8 +33,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
-
-#include <avr/pgmspace.h>
+#include <Arduino.h>
+#ifdef __AVR__
+	#include <avr/pgmspace.h>
+#else
+	#include <pgmspace.h>
+#endif
 #include <SFE_MicroOLED.h>
 
 // This fixed ugly GCC warning "only initialized variables can be placed into program memory area"

@@ -15,11 +15,20 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Modified by:
+Emil Varughese @ Edwin Robotics Pvt. Ltd.
+July 27, 2015
+https://github.com/emil01/SparkFun_Micro_OLED_Arduino_Library/
 ******************************************************************************/
 #ifndef FONT8X16_H
 #define FONT8X16_H
 
-#include <avr/pgmspace.h>
+#ifdef __AVR__
+	#include <avr/pgmspace.h>
+#else
+	#include <pgmspace.h>
+#endif
 
 static const unsigned char font8x16[] PROGMEM = {
 	// first row defines - FONTWIDTH, FONTHEIGHT, ASCII START CHAR, TOTAL CHARACTERS, FONT MAP WIDTH HIGH, FONT MAP WIDTH LOW (2,56 meaning 256)
