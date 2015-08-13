@@ -50,6 +50,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "util/font8x16.h"
 #include "util/fontlargenumber.h"
 #include "util/7segment.h"
+#include "util/fontlargeletter31x48.h"
 
 // Change the total fonts included
 #define TOTALFONTS		4
@@ -60,6 +61,7 @@ const unsigned char *MicroOLED::fontsPointer[]={
 	,font8x16
 	,sevensegment
 	,fontlargenumber
+	,fontlargeletter31x48
 };
 
 /** \brief MicroOLED screen buffer.
