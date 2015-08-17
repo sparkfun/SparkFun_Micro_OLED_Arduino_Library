@@ -41,6 +41,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 #include <SFE_MicroOLED.h>
 
+// The 31x48 font is handy, but uses a big chunk of flash memory - about 7k.
+// If you want to use font 4 in your sketch, uncomment out the line below:
+//#define INCLUDE_LARGE_LETTER_FONT
+
 // This fixed ugly GCC warning "only initialized variables can be placed into program memory area"
 #undef PROGMEM
 #define PROGMEM __attribute__((section(".progmem.data")))
@@ -53,7 +57,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "util/fontlargeletter31x48.h"
 
 // Change the total fonts included
+#ifdef INCLUDE_LARGE_LETTER_FONT
 #define TOTALFONTS		5
+#else
+#define TOTALFONTS		4
+#endif
 
 // Add the font name as declared in the header file.  Remove as many as possible to conserve FLASH memory.
 const unsigned char *MicroOLED::fontsPointer[]={
@@ -61,7 +69,9 @@ const unsigned char *MicroOLED::fontsPointer[]={
 	,font8x16
 	,sevensegment
 	,fontlargenumber
+#ifdef INCLUDE_LARGE_LETTER_FONT
 	,fontlargeletter31x48
+#endif
 };
 
 /** \brief MicroOLED screen buffer.
