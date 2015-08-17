@@ -53,7 +53,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "util/fontlargeletter31x48.h"
 
 // Change the total fonts included
-#define TOTALFONTS		4
+#define TOTALFONTS		5
 
 // Add the font name as declared in the header file.  Remove as many as possible to conserve FLASH memory.
 const unsigned char *MicroOLED::fontsPointer[]={
