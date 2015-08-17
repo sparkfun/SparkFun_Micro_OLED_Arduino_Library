@@ -284,6 +284,21 @@ void textExamples()
       s++;        // and increment s
     }
   }
+  
+  // Demonstrate font 4. 31x48. Let's use the print function
+  // to display some characters defined in this font.
+  oled.setFontType(4);  // Set font to type 4
+  oled.clear(PAGE);     // Clear the page
+  oled.setCursor(0, 0); // Set cursor to top-left
+  // Print can be used to print a string to the screen:
+  oled.print("OL");
+  oled.display();       // Refresh the display
+  delay(1000);          // Delay a second and repeat
+  oled.clear(PAGE);
+  oled.setCursor(0, 0);
+  oled.print("ED");
+  oled.display();
+  delay(1000);
 }
 
 void loop()
