@@ -41,7 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdio.h>
 #include <Arduino.h>
 
-#ifdef __AVR__
+#if defined(__AVR__) || defined(__arm__)
 	#include <avr/pgmspace.h>
 #else
 	#include <pgmspace.h>
