@@ -41,6 +41,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 #include <SFE_MicroOLED.h>
 
+#ifndef _BV
+#define _BV(x) (1<<x)
+#endif
+
 // The 31x48 font is handy, but uses a big chunk of flash memory - about 7k.
 // If you want to use font 4 in your sketch, uncomment out the line below:
 //#define INCLUDE_LARGE_LETTER_FONT
