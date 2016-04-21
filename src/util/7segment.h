@@ -31,7 +31,7 @@ https://github.com/emil01/SparkFun_Micro_OLED_Arduino_Library/
 	#include <pgmspace.h>
 #endif
 
-static const unsigned char sevensegment [] PROGMEM = {
+static const unsigned char sevensegment [] = {
 	// first row defines - FONTWIDTH, FONTHEIGHT, ASCII START CHAR, TOTAL CHARACTERS, FONT MAP WIDTH HIGH, FONT MAP WIDTH LOW (2,56 meaning 256)
 	10,16,46,12,1,20,		
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
