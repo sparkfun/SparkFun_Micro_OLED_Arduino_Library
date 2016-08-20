@@ -31,7 +31,7 @@ https://github.com/emil01/SparkFun_Micro_OLED_Arduino_Library/
 	#include <pgmspace.h>
 #endif
 
-#ifndef ARDUINO_ESP8266_NODEMCU
+#ifndef ESP8266
 	#define CUST_PROGMEM PROGMEM
 #else
 	#define CUST_PROGMEM
