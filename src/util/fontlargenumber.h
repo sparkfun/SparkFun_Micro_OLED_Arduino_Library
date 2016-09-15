@@ -31,7 +31,13 @@ https://github.com/emil01/SparkFun_Micro_OLED_Arduino_Library/
 	#include <pgmspace.h>
 #endif
 
-static const unsigned char fontlargenumber[] PROGMEM = {
+#ifndef ESP8266
+	#define CUST_PROGMEM PROGMEM
+#else
+	#define CUST_PROGMEM
+#endif
+
+static const unsigned char fontlargenumber[] CUST_PROGMEM = {
 	// first row defines - FONTWIDTH, FONTHEIGHT, ASCII START CHAR, TOTAL CHARACTERS, FONT MAP WIDTH HIGH, FONT MAP WIDTH LOW (2,56 meaning 256)
 	12,48,48,11,1,32,
 	0x00, 0xC0, 0xF8, 0x7C, 0x3E, 0x3E, 0xFC, 0xF8, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xE0,
