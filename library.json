@@ -1,0 +1,12 @@
+{
+    "name": "SparkFun Micro OLED Breakout",
+    "keywords": "display oled",
+    "description": "Library for the SparkFun Micro OLED Breakout",
+    "repository":
+    {
+        "type": "git",
+        "url": "https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library.git"
+    },
+    "frameworks": "arduino",
+    "platforms": "*"
+}
