@@ -40,6 +40,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define I2C_FREQ 400000L	// I2C Frequency is 400kHz (fast as possible)
 
+// Configure SPI settings - Max clk frequency for display is 10MHz
+SPISettings oledSettings(10000000, MSBFIRST, SPI_MODE0);
+
 /** \brief Set Up SPI Interface
 
 	Sets up the SPI pins, initializes the Arduino's SPI interface.
@@ -52,10 +55,9 @@ void MicroOLED::spiSetup()
 	pinMode(csPin, OUTPUT);	// CS is an OUTPUT
 	digitalWrite(csPin, HIGH);	// Start CS High
 	
-	// Initialize the SPI library:
-	SPI.setClockDivider(SPI_CLOCK_DIV2);	// Fastest SPI clock possible
-	SPI.setDataMode(SPI_MODE0);	// CPOL=0 and CPHA=0, SPI mode 0
+#if defined(__AVR__)
 	pinMode(10, OUTPUT); // Required for setting into Master mode
+#endif
 	SPI.begin();
 }
 
@@ -66,9 +68,11 @@ void MicroOLED::spiSetup()
 **/
 void MicroOLED::spiTransfer(byte data)
 {
-  digitalWrite(csPin, LOW);
+	SPI.beginTransaction(oledSettings);
+	digitalWrite(csPin, LOW);
 	SPI.transfer(data);	
-  digitalWrite(csPin, HIGH);
+	digitalWrite(csPin, HIGH);
+	SPI.endTransaction();
 }
 
 /** \brief Initialize the I2C Interface

@@ -50,8 +50,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define INCLUDE_LARGE_LETTER_FONT
 
 // This fixed ugly GCC warning "only initialized variables can be placed into program memory area"
+#if defined(__AVR__)
 #undef PROGMEM
 #define PROGMEM __attribute__((section(".progmem.data")))
+#endif
 
 // Add header of the fonts here.  Remove as many as possible to conserve FLASH memory.
 #include "util/font5x7.h"
