@@ -24,7 +24,7 @@ https://github.com/emil01/SparkFun_Micro_OLED_Arduino_Library/
 #ifndef FONT8X16_H
 #define FONT8X16_H
 
-#if defined(__AVR__) || defined(__arm__)
+#if defined(__AVR__) || defined(__arm__) || defined(__ARDUINO_ARC__)
 	#include <avr/pgmspace.h>
 #else
 	#include <pgmspace.h>
