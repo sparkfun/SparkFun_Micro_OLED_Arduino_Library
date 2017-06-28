@@ -492,13 +492,13 @@ Draw line using color and mode from x0,y0 to x1,y1 of the screen buffer.
 void MicroOLED::line(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t color, uint8_t mode) {
 	uint8_t steep = abs(y1 - y0) > abs(x1 - x0);
 	if (steep) {
-		swap(x0, y0);
-		swap(x1, y1);
+		swapOLED(x0, y0);
+		swapOLED(x1, y1);
 	}
 
 	if (x0 > x1) {
-		swap(x0, x1);
-		swap(y0, y1);
+		swapOLED(x0, x1);
+		swapOLED(y0, y1);
 	}
 
 	uint8_t dx, dy;
