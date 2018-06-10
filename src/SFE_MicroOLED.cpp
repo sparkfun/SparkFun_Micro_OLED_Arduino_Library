@@ -205,12 +205,14 @@ void MicroOLED::begin()
 	setDrawMode(NORM);
 	setCursor(0,0);
 
-	pinMode(dcPin, OUTPUT);
 	pinMode(rstPin, OUTPUT);
 
 	// Set up the selected interface:
 	if (interface == MODE_SPI)
+	{
+		pinMode(dcPin, OUTPUT);
 		spiSetup();
+	}
 	else if (interface == MODE_I2C)
 		i2cSetup();
 	else if (interface == MODE_PARALLEL)
