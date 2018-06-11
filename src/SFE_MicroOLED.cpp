@@ -209,8 +209,6 @@ void MicroOLED::begin()
 
 	// Set up the selected interface:
 	if (interface == MODE_SPI)
-	{
-		pinMode(dcPin, OUTPUT);
 		spiSetup();
 	}
 	else if (interface == MODE_I2C)

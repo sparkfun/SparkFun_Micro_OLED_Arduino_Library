@@ -50,6 +50,7 @@ SPISettings oledSettings(10000000, MSBFIRST, SPI_MODE0);
 void MicroOLED::spiSetup()
 {
 	// Initialize the pins:
+	pinMode(dcPin, OUTPUT); //dc Is used for SPI and parallel interfaces but not I2C
 	pinMode(MOSI, OUTPUT);	// MOSI is an OUTPUT
 	pinMode(SCK, OUTPUT);	// SCK is an OUTPUT
 	pinMode(csPin, OUTPUT);	// CS is an OUTPUT
@@ -107,6 +108,8 @@ void MicroOLED::i2cWrite(byte address, byte dc, byte data)
 **/
 void MicroOLED::parallelSetup()
 {
+	pinMode(dcPin, OUTPUT); //dc Is used for SPI and parallel interfaces but not I2C
+
 	// Initialize WR, RD, CS and data pins as outputs.
 	pinMode(wrPin, OUTPUT);
 	digitalWrite(wrPin, HIGH);
