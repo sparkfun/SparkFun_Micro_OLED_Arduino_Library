@@ -210,7 +210,6 @@ void MicroOLED::begin()
 	// Set up the selected interface:
 	if (interface == MODE_SPI)
 		spiSetup();
-	}
 	else if (interface == MODE_I2C)
 		i2cSetup();
 	else if (interface == MODE_PARALLEL)
