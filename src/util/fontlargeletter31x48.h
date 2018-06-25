@@ -19,7 +19,7 @@ https://github.com/DaAwesomeP/SparkFun_Micro_OLED_Arduino_Library/
 
 #ifndef FONTLARGELETTER31X48_H
 #define FONTLARGELETTER31X48_H
-#if defined(__AVR__) || defined(__arm__)
+#if defined(__AVR__) || defined(__arm__) || defined(__ARDUINO_ARC__)
 	#include <avr/pgmspace.h>
 #else
 	#include <pgmspace.h>
