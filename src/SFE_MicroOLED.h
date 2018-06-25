@@ -47,8 +47,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	#include <pgmspace.h>
 #endif
 
-#define swapOLED(a, b) { uint8_t t = a; a = b; b = t; }
-
 #define I2C_ADDRESS_SA0_0 0b0111100
 #define I2C_ADDRESS_SA0_1 0b0111101
 #define I2C_COMMAND 0x00

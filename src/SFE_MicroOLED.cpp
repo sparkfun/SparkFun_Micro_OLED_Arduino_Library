@@ -69,6 +69,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TOTALFONTS		4
 #endif
 
+#define swapOLED(a, b) { uint8_t t = a; a = b; b = t; }
+
 // Add the font name as declared in the header file.  Remove as many as possible to conserve FLASH memory.
 const unsigned char *MicroOLED::fontsPointer[]={
 	font5x7
