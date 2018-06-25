@@ -29,7 +29,7 @@ Products that use this Library
 
 Version History
 ---------------
-* master - add platform.io support
+* [v 1.2.3](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.3) -- Fix for I2C dcPin not configured
 * [v 1.2.0](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/V_1.2.0) - add SAMD21 support, fix PROGMEM and `_BV` errors
 * v 1.1.3 (not released)
 * [v 1.1.2](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/tree/V_1.1.2) - Added compatibility for ESP8266
