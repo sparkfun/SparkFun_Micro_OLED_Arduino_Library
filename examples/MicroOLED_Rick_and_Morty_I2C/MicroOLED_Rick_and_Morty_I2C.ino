@@ -40,6 +40,7 @@ MicroOLED oled(PIN_RESET, DC_JUMPER);    // I2C declaration
 void setup()
 {
   delay(100);
+  Wire.begin();
   oled.begin();    // Initialize the OLED
   oled.clear(ALL); // Clear the display's internal memory
   oled.display();  // Display what's in the buffer (splashscreen)

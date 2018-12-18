@@ -83,8 +83,7 @@ void MicroOLED::spiTransfer(byte data)
 **/
 void MicroOLED::i2cSetup()
 {
-	// Initialize Wire library (I2C)
-	Wire.begin();
+
 }
 
 /** \brief  Write a byte over I2C
