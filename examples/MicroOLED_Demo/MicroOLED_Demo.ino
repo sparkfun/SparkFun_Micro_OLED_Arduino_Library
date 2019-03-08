@@ -321,7 +321,7 @@ void printTitle(String title, int font)
   oled.setFontType(font);
   // Try to set the cursor in the middle of the screen
   oled.setCursor(middleX - (oled.getFontWidth() * (title.length()/2)),
-                 middleY - (oled.getFontWidth() / 2));
+                 middleY - (oled.getFontHeight() / 2));
   // Print the title:
   oled.print(title);
   oled.display();
