@@ -1,21 +1,21 @@
 /******************************************************************************
- * MicroOLED_Demo.ino
- * SFE_MicroOLED Library Demo
- * Jim Lindblom @ SparkFun Electronics
- * Original Creation Date: October 27, 2014
- * 
- * This sketch uses the MicroOLED library to draw a 3-D projected
- * cube, and rotate it along all three axes.
- * 
- * Development environment specifics:
- *  Arduino 1.0.5
- *  Arduino Pro 3.3V
- *  Micro OLED Breakout v1.0
- * 
- * This code is beerware; if you see me (or any other SparkFun employee) at the
- * local, and you've found our code helpful, please buy us a round!
- * 
- * Distributed as-is; no warranty is given.
+   MicroOLED_Demo.ino
+   SFE_MicroOLED Library Demo
+   Jim Lindblom @ SparkFun Electronics
+   Original Creation Date: October 27, 2014
+
+   This sketch uses the MicroOLED library to draw a 3-D projected
+   cube, and rotate it along all three axes.
+
+   Development environment specifics:
+    Arduino 1.0.5
+    Arduino Pro 3.3V
+    Micro OLED Breakout v1.0
+
+   This code is beerware; if you see me (or any other SparkFun employee) at the
+   local, and you've found our code helpful, please buy us a round!
+
+   Distributed as-is; no warranty is given.
  ******************************************************************************/
 #include <Wire.h>  // Include Wire if you're using I2C
 #include <SPI.h>  // Include SPI if you're using SPI
@@ -27,30 +27,42 @@
 #define PIN_RESET 9  // Connect RST to pin 9
 #define PIN_DC    8  // Connect DC to pin 8
 #define PIN_CS    10 // Connect CS to pin 10
-#define DC_JUMPER 0
+#define DC_JUMPER 0 // Set to either 0 (SPI, default) or 1 (I2C) based on jumper, matching the value of the DC Jumper
 
 //////////////////////////////////
 // MicroOLED Object Declaration //
 //////////////////////////////////
-MicroOLED oled(PIN_RESET, PIN_DC, PIN_CS); // SPI declaration
-//MicroOLED oled(PIN_RESET, DC_JUMPER);    // I2C declaration
+// Declare a MicroOLED object. The parameters include:
+// 1 - Reset pin: Any digital pin
+// 2 - D/C pin: Any digital pin (SPI mode only)
+// 3 - CS pin: Any digital pin (SPI mode only, 10 recommended)
 
+MicroOLED oled(PIN_RESET, PIN_DC, PIN_CS); //Example SPI declaration, comment out if using I2C
+//MicroOLED oled(PIN_RESET, DC_JUMPER); //Example I2C declaration, uncomment if using I2C
+
+// I2C is great, but will result in a much slower update rate. The
+// slower framerate may be a worthwhile tradeoff, if you need more
+// pins, though.
 void setup()
 {
+
+  delay(100);
+  //Wire.begin(); //set up I2C bus, uncomment if you are using I2C
+
   oled.begin();    // Initialize the OLED
   oled.clear(ALL); // Clear the display's internal memory
   oled.display();  // Display what's in the buffer (splashscreen)
   delay(1000);     // Delay 1000 ms
   oled.clear(PAGE); // Clear the buffer.
-  
+
   randomSeed(analogRead(A0) + analogRead(A1));
 }
 
 void pixelExample()
 {
   printTitle("Pixels", 1);
-  
-  for (int i=0; i<512; i++)
+
+  for (int i = 0; i < 512; i++)
   {
     oled.pixel(random(oled.getLCDWidth()), random(oled.getLCDHeight()));
     oled.display();
@@ -63,25 +75,25 @@ void lineExample()
   int middleY = oled.getLCDHeight() / 2;
   int xEnd, yEnd;
   int lineWidth = min(middleX, middleY);
-  
+
   printTitle("Lines!", 1);
-  
-  for (int i=0; i<3; i++)
+
+  for (int i = 0; i < 3; i++)
   {
-    for (int deg=0; deg<360; deg+=15)
+    for (int deg = 0; deg < 360; deg += 15)
     {
       xEnd = lineWidth * cos(deg * PI / 180.0);
       yEnd = lineWidth * sin(deg * PI / 180.0);
-      
+
       oled.line(middleX, middleY, middleX + xEnd, middleY + yEnd);
       oled.display();
       delay(10);
     }
-    for (int deg=0; deg<360; deg+=15)
+    for (int deg = 0; deg < 360; deg += 15)
     {
       xEnd = lineWidth * cos(deg * PI / 180.0);
       yEnd = lineWidth * sin(deg * PI / 180.0);
-      
+
       oled.line(middleX, middleY, middleX + xEnd, middleY + yEnd, BLACK, NORM);
       oled.display();
       delay(10);
@@ -92,7 +104,7 @@ void lineExample()
 void shapeExample()
 {
   printTitle("Shapes!", 0);
-  
+
   // Silly pong demo. It takes a lot of work to fake pong...
   int paddleW = 3;  // Paddle width
   int paddleH = 15;  // Paddle height
@@ -110,14 +122,14 @@ void shapeExample()
   int ballVelocityY = 1;  // Ball up/down velocity
   int paddle0Velocity = -1;  // Paddle 0 velocity
   int paddle1Velocity = 1;  // Paddle 1 velocity
-    
+
   //while(ball_X >= paddle0_X + paddleW - 1)
-  while ((ball_X - ball_rad > 1) && 
+  while ((ball_X - ball_rad > 1) &&
          (ball_X + ball_rad < oled.getLCDWidth() - 2))
   {
     // Increment ball's position
-    ball_X+=ballVelocityX;
-    ball_Y+=ballVelocityY;
+    ball_X += ballVelocityX;
+    ball_Y += ballVelocityY;
     // Check if the ball is colliding with the left paddle
     if (ball_X - ball_rad < paddle0_X + paddleW)
     {
@@ -157,13 +169,13 @@ void shapeExample()
     {
       paddle1Velocity = -paddle1Velocity;
     }
-    
+
     // Draw the Pong Field
     oled.clear(PAGE);  // Clear the page
     // Draw an outline of the screen:
     oled.rect(0, 0, oled.getLCDWidth() - 1, oled.getLCDHeight());
     // Draw the center line
-    oled.rectFill(oled.getLCDWidth()/2 - 1, 0, 2, oled.getLCDHeight());
+    oled.rectFill(oled.getLCDWidth() / 2 - 1, 0, 2, oled.getLCDHeight());
     // Draw the Paddles:
     oled.rectFill(paddle0_X, paddle0_Y, paddleW, paddleH);
     oled.rectFill(paddle1_X, paddle1_Y, paddleW, paddleH);
@@ -179,14 +191,14 @@ void shapeExample()
 void textExamples()
 {
   printTitle("Text!", 1);
-  
+
   // Demonstrate font 0. 5x8 font
   oled.clear(PAGE);     // Clear the screen
   oled.setFontType(0);  // Set font to type 0
   oled.setCursor(0, 0); // Set cursor to top-left
   // There are 255 possible characters in the font 0 type.
   // Lets run through all of them and print them out!
-  for (int i=0; i<=255; i++)
+  for (int i = 0; i <= 255; i++)
   {
     // You can write byte values and they'll be mapped to
     // their ASCII equivalent character.
@@ -196,7 +208,7 @@ void textExamples()
     // We can only display 60 font 0 characters at a time.
     // Every 60 characters, pause for a moment. Then clear
     // the page and start over.
-    if ((i%60 == 0) && (i != 0))
+    if ((i % 60 == 0) && (i != 0))
     {
       delay(500);           // Delay 500 ms
       oled.clear(PAGE);     // Clear the page
@@ -204,7 +216,7 @@ void textExamples()
     }
   }
   delay(500);  // Wait 500ms before next example
-  
+
   // Demonstrate font 1. 8x16. Let's use the print function
   // to display every character defined in this font.
   oled.setFontType(1);  // Set font to type 1
@@ -234,12 +246,12 @@ void textExamples()
   oled.print("tuvwxyz{|}~");
   oled.display();
   delay(1000);
-  
-  // Demonstrate font 2. 10x16. Only numbers and '.' are defined. 
+
+  // Demonstrate font 2. 10x16. Only numbers and '.' are defined.
   // This font looks like 7-segment displays.
   // Lets use this big-ish font to display readings from the
   // analog pins.
-  for (int i=0; i<25; i++)
+  for (int i = 0; i < 25; i++)
   {
     oled.clear(PAGE);            // Clear the display
     oled.setCursor(0, 0);        // Set cursor to top-left
@@ -260,7 +272,7 @@ void textExamples()
     oled.display();
     delay(100);
   }
-  
+
   // Demonstrate font 3. 12x48. Stopwatch demo.
   oled.setFontType(3);  // Use the biggest font
   int ms = 0;
@@ -271,7 +283,7 @@ void textExamples()
     oled.setCursor(0, 0); // Set cursor to top-left
     if (s < 10)
       oled.print("00");   // Print "00" if s is 1 digit
-    else if (s < 100)     
+    else if (s < 100)
       oled.print("0");    // Print "0" if s is 2 digits
     oled.print(s);        // Print s's value
     oled.print(":");      // Print ":"
@@ -284,7 +296,7 @@ void textExamples()
       s++;        // and increment s
     }
   }
-  
+
   // Demonstrate font 4. 31x48. Let's use the print function
   // to display some characters defined in this font.
   oled.setFontType(4);  // Set font to type 4
@@ -316,11 +328,11 @@ void printTitle(String title, int font)
 {
   int middleX = oled.getLCDWidth() / 2;
   int middleY = oled.getLCDHeight() / 2;
-  
+
   oled.clear(PAGE);
   oled.setFontType(font);
   // Try to set the cursor in the middle of the screen
-  oled.setCursor(middleX - (oled.getFontWidth() * (title.length()/2)),
+  oled.setCursor(middleX - (oled.getFontWidth() * (title.length() / 2)),
                  middleY - (oled.getFontHeight() / 2));
   // Print the title:
   oled.print(title);
