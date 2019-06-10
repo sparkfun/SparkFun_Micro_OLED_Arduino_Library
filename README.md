@@ -1,11 +1,18 @@
 SparkFun Micro OLED Breakout Arduino Library
 ========================================
 
-![SparkFun Micro OLED Breakout](https://cdn.sparkfun.com//assets/parts/9/9/5/6/OLED_Action.jpg)
+<table class="table table-hover table-striped table-bordered">
+  <tr align="center">
+   <td><a href="https://www.sparkfun.com/products/13003"><img src="https://cdn.sparkfun.com//assets/parts/9/9/5/6/OLED_Action.jpg" alt="SparkFun Micro OLED Breakout"></a></td>
+   <td><a href="https://www.sparkfun.com/products/14532"><img src="https://cdn.sparkfun.com//assets/parts/1/2/6/2/1/14532-SparkFun_Micro_OLED_Breakout__Qwiic_-01.jpg" alt="SparkFun Micro OLED Breakout (Qwiic)"></a></td>
+  </tr>
+  <tr align="center">
+    <td><i><a href="https://www.sparkfun.com/products/13003">SparkFun Micro OLED Breakout (LCD-13003)</a></i></td>
+    <td><i><a href="https://www.sparkfun.com/products/14532">SparkFun Micro OLED Breakout (Qwiic)</a></i></td>
+  </tr>
+</table>
 
-[*SparkFun Micro OLED Breakout (LCD-13003)*](https://www.sparkfun.com/products/13003)
-
-An Arduino library that allows you to draw shapes and text on the Micro OLED display.
+An Arduino library that allows you to draw shapes and text on the Micro OLED display and Qwiic micro OLED breakout.
 
 Repository Contents
 -------------------
@@ -26,9 +33,14 @@ Products that use this Library
 ---------------------------------
 
 * [Micro OLED Breakout](https://www.sparkfun.com/products/13003)- A breakout for the monochrome 64x48 OLED.
+* [Micro OLED Breakout (Qwiic)](https://www.sparkfun.com/products/14532) - Qwiic version of the Micro OLED breakout with jumpers set for I2C
 
 Version History
 ---------------
+* [v 1.2.7](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/V_1.2.7) - Add more comments and Wire.begin() to examples
+* [v 1.2.6](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/V_1.2.6) - Removes call of Wire.begin from library
+* [v 1.2.5](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.5) - Adding Qwiic Examples for I2C
+* [v 1.2.4](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v.1.2.4) - Add colon to 7-segment font, add version history information to README, move and rename swap function to avoid namespace issues, add support for Arduino 101.
 * [v 1.2.3](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.3) -- Fix for I2C dcPin not configured
 * [v 1.2.0](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/V_1.2.0) - add SAMD21 support, fix PROGMEM and `_BV` errors
 * v 1.1.3 (not released)
