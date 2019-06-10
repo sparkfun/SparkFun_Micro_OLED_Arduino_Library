@@ -37,7 +37,7 @@ Products that use this Library
 
 Version History
 ---------------
-* [v 1.2.7](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/V_1.2.7) - Add more comments and Wire.begin() to examples
+* [v 1.2.7](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.7) - Add more comments and Wire.begin() to examples
 * [v 1.2.6](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/V_1.2.6) - Removes call of Wire.begin from library
 * [v 1.2.5](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.5) - Adding Qwiic Examples for I2C
 * [v 1.2.4](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v.1.2.4) - Add colon to 7-segment font, add version history information to README, move and rename swap function to avoid namespace issues, add support for Arduino 101.
