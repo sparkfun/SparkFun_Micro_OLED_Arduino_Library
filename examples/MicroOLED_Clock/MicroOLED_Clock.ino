@@ -4,9 +4,6 @@
    Jim Lindblom @ SparkFun Electronics
    Original Creation Date: October 27, 2014
 
-   This sketch uses the MicroOLED library to draw a 3-D projected
-   cube, and rotate it along all three axes.
-
    Development environment specifics:
     Arduino 1.0.5
     Arduino Pro 3.3V
