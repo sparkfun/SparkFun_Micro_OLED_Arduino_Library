@@ -37,6 +37,7 @@ Products that use this Library
 
 Version History
 ---------------
+* [v 1.2.8](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.7) - Add drawIcon() and resort examples with Qwiic as default.
 * [v 1.2.7](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.7) - Add more comments and Wire.begin() to examples
 * [v 1.2.6](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/V_1.2.6) - Removes call of Wire.begin from library
 * [v 1.2.5](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.5) - Adding Qwiic Examples for I2C
