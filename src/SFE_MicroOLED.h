@@ -177,6 +177,7 @@ public:
 	void drawChar(uint8_t x, uint8_t y, uint8_t c);
 	void drawChar(uint8_t x, uint8_t y, uint8_t c, uint8_t color, uint8_t mode);
 	void drawBitmap(uint8_t *bitArray);
+	void drawIcon(uint8_t locationX, uint8_t locationY, uint8_t iconWidth, uint8_t iconHeight, uint8_t *bitArray, uint8_t arraySizeInBytes, bool overwrite = false);
 	uint8_t getLCDWidth(void);
 	uint8_t getLCDHeight(void);
 	void setColor(uint8_t color);

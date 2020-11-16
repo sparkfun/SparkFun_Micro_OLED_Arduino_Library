@@ -1047,3 +1047,50 @@ void MicroOLED::drawBitmap(uint8_t *bitArray)
 	for (int i = 0; i < (LCDWIDTH * LCDHEIGHT / 8); i++)
 		screenmemory[i] = bitArray[i];
 }
+
+//Draw an icon at a given spot
+//Use http://en.radzio.dxp.pl/bitmap_converter/ to generate output
+//Make sure the bitmap is n*8 pixels tall (pad white pixels to lower area as needed)
+//Otherwise the bitmap bitmap_converter will compress some of the bytes together
+void MicroOLED::drawIcon(uint8_t offsetX, uint8_t offsetY, uint8_t iconWidth, uint8_t iconHeight, uint8_t *bitArray, uint8_t arraySizeInBytes, bool overwrite)
+{
+	uint8_t columnNumber = offsetX;
+	uint8_t rowNumber = offsetY / 8;
+
+	uint8_t bitOffset = offsetY % 8;
+
+	for (uint8_t i = 0; i < arraySizeInBytes; i++)
+	{
+		uint16_t byteNumber = rowNumber * 64 + columnNumber;
+
+		//If we have an offset, then straddle the bytes between rows
+		if (bitOffset)
+		{
+			//Zero out the bits before entering new data
+			if (overwrite == true)
+			{
+				screenmemory[byteNumber] &= ~(0xFF << bitOffset);
+				screenmemory[byteNumber + 64] &= ~(0xFF >> (8 - bitOffset));
+			}
+
+			//Write in new data across two rows
+			screenmemory[byteNumber] |= bitArray[i] << bitOffset;
+			screenmemory[byteNumber + 64] |= bitArray[i] >> (8 - bitOffset);
+		}
+		else //No shift needed
+		{
+			//Regular clear
+			if (overwrite == true)
+				screenmemory[byteNumber] = 0;
+			screenmemory[byteNumber] |= bitArray[i];
+		}
+
+		columnNumber++;
+		if (columnNumber == offsetX + iconWidth - 1)
+		{
+			//Wrap to next row
+			rowNumber++;
+			columnNumber = offsetX;
+		}
+	}
+}
