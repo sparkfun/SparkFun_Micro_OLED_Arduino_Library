@@ -1086,7 +1086,7 @@ void MicroOLED::drawIcon(uint8_t offsetX, uint8_t offsetY, uint8_t iconWidth, ui
 		}
 
 		columnNumber++;
-		if (columnNumber == offsetX + iconWidth - 1)
+		if (columnNumber == offsetX + iconWidth)
 		{
 			//Wrap to next row
 			rowNumber++;

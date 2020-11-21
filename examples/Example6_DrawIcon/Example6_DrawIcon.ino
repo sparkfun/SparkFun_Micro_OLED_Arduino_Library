@@ -67,7 +67,7 @@ uint8_t truck[] = {
 };
 
 int iconHeight = 17;
-int iconWidth = 20;
+int iconWidth = 19;
 
 bool displayDetected = false;
 
