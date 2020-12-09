@@ -1066,23 +1066,29 @@ void MicroOLED::drawIcon(uint8_t offsetX, uint8_t offsetY, uint8_t iconWidth, ui
 		//If we have an offset, then straddle the bytes between rows
 		if (bitOffset)
 		{
+
 			//Zero out the bits before entering new data
 			if (overwrite == true)
 			{
 				screenmemory[byteNumber] &= ~(0xFF << bitOffset);
-				screenmemory[byteNumber + 64] &= ~(0xFF >> (8 - bitOffset));
+				if (byteNumber + 64 < (LCDHEIGHT * LCDWIDTH / 8)) //Prevent writes outside screenmemory
+					screenmemory[byteNumber + 64] &= ~(0xFF >> (8 - bitOffset));
 			}
 
 			//Write in new data across two rows
 			screenmemory[byteNumber] |= bitArray[i] << bitOffset;
-			screenmemory[byteNumber + 64] |= bitArray[i] >> (8 - bitOffset);
+			if (byteNumber + 64 < (LCDHEIGHT * LCDWIDTH / 8)) //Prevent writes outside screenmemory
+				screenmemory[byteNumber + 64] |= bitArray[i] >> (8 - bitOffset);
 		}
 		else //No shift needed
 		{
-			//Regular clear
-			if (overwrite == true)
-				screenmemory[byteNumber] = 0;
-			screenmemory[byteNumber] |= bitArray[i];
+			if (byteNumber < (LCDHEIGHT * LCDWIDTH) / 8) //Prevent writes outside screenmemory
+			{
+				//Regular clear
+				if (overwrite == true)
+					screenmemory[byteNumber] = 0;
+				screenmemory[byteNumber] |= bitArray[i];
+			}
 		}
 
 		columnNumber++;
