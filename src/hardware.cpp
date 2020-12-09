@@ -38,8 +38,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <SPI.h>
 #include <Wire.h>
 
-#define I2C_FREQ 400000L	// I2C Frequency is 400kHz (fast as possible)
-
 // Configure SPI settings - Max clk frequency for display is 10MHz
 SPISettings oledSettings(10000000, MSBFIRST, SPI_MODE0);
 
@@ -50,12 +48,12 @@ SPISettings oledSettings(10000000, MSBFIRST, SPI_MODE0);
 void MicroOLED::spiSetup()
 {
 	// Initialize the pins:
-	pinMode(dcPin, OUTPUT); //dc Is used for SPI and parallel interfaces but not I2C
-	pinMode(MOSI, OUTPUT);	// MOSI is an OUTPUT
-	pinMode(SCK, OUTPUT);	// SCK is an OUTPUT
-	pinMode(csPin, OUTPUT);	// CS is an OUTPUT
-	digitalWrite(csPin, HIGH);	// Start CS High
-	
+	pinMode(dcPin, OUTPUT);	   //dc Is used for SPI and parallel interfaces but not I2C
+	pinMode(MOSI, OUTPUT);	   // MOSI is an OUTPUT
+	pinMode(SCK, OUTPUT);	   // SCK is an OUTPUT
+	pinMode(csPin, OUTPUT);	   // CS is an OUTPUT
+	digitalWrite(csPin, HIGH); // Start CS High
+
 #if defined(__AVR__)
 	pinMode(10, OUTPUT); // Required for setting into Master mode
 #endif
@@ -71,7 +69,7 @@ void MicroOLED::spiTransfer(byte data)
 {
 	SPI.beginTransaction(oledSettings);
 	digitalWrite(csPin, LOW);
-	SPI.transfer(data);	
+	SPI.transfer(data);
 	digitalWrite(csPin, HIGH);
 	SPI.endTransaction();
 }
@@ -83,7 +81,6 @@ void MicroOLED::spiTransfer(byte data)
 **/
 void MicroOLED::i2cSetup()
 {
-
 }
 
 /** \brief  Write a byte over I2C
@@ -116,7 +113,7 @@ void MicroOLED::parallelSetup()
 	digitalWrite(rdPin, HIGH);
 	pinMode(csPin, OUTPUT);
 	digitalWrite(csPin, HIGH);
-	for (int i=0; i<8; i++)
+	for (int i = 0; i < 8; i++)
 		pinMode(dPins[i], OUTPUT);
 }
 
@@ -132,29 +129,28 @@ void MicroOLED::parallelWrite(byte data, byte dc)
 	//digitalWrite(csPin, HIGH);
 	//digitalWrite(wrPin, HIGH);
 	//digitalWrite(rdPin, HIGH);
-	
+
 	// chip select high->low
 	digitalWrite(csPin, LOW);
-	
+
 	// dc high or low
 	digitalWrite(dcPin, dc);
-	
+
 	// wr high->low
 	digitalWrite(wrPin, LOW);
-	
+
 	// set data pins
-	for (int i=0; i<8; i++)
+	for (int i = 0; i < 8; i++)
 	{
-		if (data & (1<<i))
+		if (data & (1 << i))
 			digitalWrite(dPins[i], HIGH);
 		else
 			digitalWrite(dPins[i], LOW);
 	}
-	
+
 	// wr low->high
 	digitalWrite(wrPin, HIGH);
-		
+
 	// cs high
 	digitalWrite(csPin, HIGH);
 }
-
