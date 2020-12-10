@@ -19,7 +19,7 @@
 #include <SFE_MicroOLED.h> //Click here to get the library: http://librarymanager/All#SparkFun_Micro_OLED
 
 #define PIN_RESET 9
-#define DC_JUMPER 0
+#define DC_JUMPER 1
 MicroOLED oled(PIN_RESET, DC_JUMPER); // I2C declaration
 
 void setup()
