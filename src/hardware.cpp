@@ -100,7 +100,7 @@ void MicroOLED::i2cWrite(byte address, byte dc, byte data)
 /** \brief  Write multiple data bytes over I2C
 
 	Write multiple bytes to I2C device _address_.
-	Returns true if all numDataBytes were pushed successfully
+	Returns true if all numDataBytes were written successfully
 **/
 boolean MicroOLED::i2cWriteMultiple(uint8_t address, uint8_t *dataBytes, size_t numDataBytes)
 {

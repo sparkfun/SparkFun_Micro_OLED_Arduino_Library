@@ -458,12 +458,7 @@ void MicroOLED::display(void)
 		setColumnAddress(0);
 		if (interface == MODE_I2C)
 		{
-			uint8_t store[0x40];
-			for (j = 0; j < 0x40; j++)
-			{
-				store[j] = screenmemory[i * 0x40 + j];
-			}
-			i2cWriteMultiple(i2c_address, (uint8_t *)&store, 0x40);
+			i2cWriteMultiple(i2c_address, (uint8_t *)&screenmemory[i * 0x40], 0x40);
 		}
 		else
 		{
