@@ -60,6 +60,9 @@ draw	KEYWORD2
 drawFace	KEYWORD2
 checkComm	KEYWORD2
 
+setI2CTransactionSize	KEYWORD2
+getI2CTransactionSize	KEYWORD2
+
 #######################################
 # Constants (LITERAL1)
 #######################################
@@ -70,5 +73,3 @@ NORM	LITERAL1
 XOR	LITERAL1
 PAGE	LITERAL1
 ALL	LITERAL1
-
-

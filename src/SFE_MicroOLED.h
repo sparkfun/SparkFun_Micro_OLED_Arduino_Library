@@ -1,4 +1,4 @@
-/****************************************************************************** 
+/******************************************************************************
 SFE_MicroOLED.h
 Header file for the MicroOLED Arduino Library
 
@@ -21,9 +21,9 @@ Arduino Pro 3.3V
 Micro OLED Breakout v1.0
 
 This code was heavily based around the MicroView library, written by GeekAmmo
-(https://github.com/geekammo/MicroView-Arduino-Library), and released under 
-the terms of the GNU General Public License as published by the Free Software 
-Foundation, either version 3 of the License, or (at your option) any later 
+(https://github.com/geekammo/MicroView-Arduino-Library), and released under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
 version.
 
 This program is distributed in the hope that it will be useful,
@@ -202,6 +202,13 @@ public:
 	void flipVertical(boolean flip);
 	void flipHorizontal(boolean flip);
 
+	//Control the size of the internal I2C transaction amount
+	void setI2CTransactionSize(uint8_t bufferSize);
+	uint8_t getI2CTransactionSize(void);
+
+	//Set the max number of bytes set in a given I2C transaction
+	uint8_t i2cTransactionSize = 32; //Default to ATmega328 limit
+
 private:
 	uint8_t csPin, dcPin, rstPin;
 	uint8_t wrPin, rdPin, dPins[8];
@@ -220,6 +227,7 @@ private:
 	void spiSetup();
 	void i2cSetup();
 	void i2cWrite(byte address, byte control, byte data);
+	boolean i2cWriteMultiple(byte address, uint8_t *dataBytes, size_t numDataBytes);
 	void parallelSetup();
 	void parallelWrite(byte data, byte dc);
 };

@@ -1,4 +1,4 @@
-/****************************************************************************** 
+/******************************************************************************
 hardware.cpp
 MicroOLED Arduino Library Hardware Interface
 
@@ -20,9 +20,9 @@ Arduino Pro 3.3V
 Micro OLED Breakout v1.0
 
 This code was heavily based around the MicroView library, written by GeekAmmo
-(https://github.com/geekammo/MicroView-Arduino-Library), and released under 
-the terms of the GNU General Public License as published by the Free Software 
-Foundation, either version 3 of the License, or (at your option) any later 
+(https://github.com/geekammo/MicroView-Arduino-Library), and released under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
 version.
 
 This program is distributed in the hope that it will be useful,
@@ -95,6 +95,48 @@ void MicroOLED::i2cWrite(byte address, byte dc, byte data)
 	Wire.write(dc); // If data dc = 0, if command dc = 0x40
 	Wire.write(data);
 	Wire.endTransmission();
+}
+
+/** \brief  Write multiple data bytes over I2C
+
+	Write multiple bytes to I2C device _address_.
+	Returns true if all numDataBytes were pushed successfully
+**/
+boolean MicroOLED::i2cWriteMultiple(uint8_t address, uint8_t *dataBytes, size_t numDataBytes)
+{
+  // I2C: split the data up into packets of i2cTransactionSize
+  size_t bytesLeftToWrite = numDataBytes;
+  size_t bytesWrittenTotal = 0;
+
+  while (bytesLeftToWrite > 0)
+  {
+    size_t bytesToWrite; // Limit bytesToWrite to i2cTransactionSize
+    if (bytesLeftToWrite > (i2cTransactionSize - 1))
+      bytesToWrite = i2cTransactionSize - 1;
+    else
+      bytesToWrite = bytesLeftToWrite;
+
+    Wire.beginTransmission(address);
+		Wire.write(I2C_DATA);
+    size_t bytesWritten = Wire.write(dataBytes, bytesToWrite); // Write the bytes
+
+    bytesWrittenTotal += bytesWritten; // Update the totals
+    bytesLeftToWrite -= bytesToWrite;
+    dataBytes += bytesToWrite; // Point to fresh data
+
+    if (bytesLeftToWrite > 0)
+    {
+      if (Wire.endTransmission(false) != 0) //Send a restart command. Do not release bus.
+        return (false);                          //Sensor did not ACK
+    }
+    else
+    {
+      if (Wire.endTransmission() != 0) //We're done. Release bus.
+        return (false);                     //Sensor did not ACK
+    }
+  }
+
+  return (bytesWrittenTotal == numDataBytes);
 }
 
 /** \brief Set up Parallel Interface

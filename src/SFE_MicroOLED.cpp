@@ -365,9 +365,18 @@ void MicroOLED::clear(uint8_t mode)
 		{
 			setPageAddress(i);
 			setColumnAddress(0);
-			for (int j = 0; j < 0x80; j++)
+			if (interface == MODE_I2C)
 			{
-				data(0);
+				uint8_t zeros[0x80];
+				memset(zeros, 0, 0x80);
+				i2cWriteMultiple(i2c_address, (uint8_t *)&zeros, 0x80);
+			}
+			else
+			{
+				for (int j = 0; j < 0x80; j++)
+				{
+					data(0);
+				}
 			}
 		}
 	}
@@ -391,9 +400,18 @@ void MicroOLED::clear(uint8_t mode, uint8_t c)
 		{
 			setPageAddress(i);
 			setColumnAddress(0);
-			for (int j = 0; j < 0x80; j++)
+			if (interface == MODE_I2C)
 			{
-				data(c);
+				uint8_t zeros[0x80];
+				memset(zeros, c, 0x80);
+				i2cWriteMultiple(i2c_address, (uint8_t *)&zeros, 0x80);
+			}
+			else
+			{
+				for (int j = 0; j < 0x80; j++)
+				{
+					data(c);
+				}
 			}
 		}
 	}
@@ -438,9 +456,21 @@ void MicroOLED::display(void)
 	{
 		setPageAddress(i);
 		setColumnAddress(0);
-		for (j = 0; j < 0x40; j++)
+		if (interface == MODE_I2C)
 		{
-			data(screenmemory[i * 0x40 + j]);
+			uint8_t store[0x40];
+			for (j = 0; j < 0x40; j++)
+			{
+				store[j] = screenmemory[i * 0x40 + j];
+			}
+			i2cWriteMultiple(i2c_address, (uint8_t *)&store, 0x40);
+		}
+		else
+		{
+			for (j = 0; j < 0x40; j++)
+			{
+				data(screenmemory[i * 0x40 + j]);
+			}
 		}
 	}
 }
@@ -1099,4 +1129,17 @@ void MicroOLED::drawIcon(uint8_t offsetX, uint8_t offsetY, uint8_t iconWidth, ui
 			columnNumber = offsetX;
 		}
 	}
+}
+
+//Sets the global size for I2C transactions
+//Most platforms use 32 bytes (the default) but this allows users to increase the transaction
+//size if the platform supports it
+//Note: If the transaction size is set larger than the platforms buffer size, bad things will happen.
+void MicroOLED::setI2CTransactionSize(uint8_t transactionSize)
+{
+  i2cTransactionSize = transactionSize;
+}
+uint8_t MicroOLED::getI2CTransactionSize(void)
+{
+  return (i2cTransactionSize);
 }
