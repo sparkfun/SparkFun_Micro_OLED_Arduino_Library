@@ -1023,6 +1023,63 @@ void MicroOLED::scrollRight(uint8_t start, uint8_t stop)
 	command(ACTIVATESCROLL);
 }
 
+/** \brief Vert Right scrolling.
+
+Set row start to row stop on the OLED to scroll vert right.
+*/
+void MicroOLED::scrollVertRight(uint8_t start, uint8_t stop)
+{
+	if (stop < start) // stop must be larger or equal to start
+		return;
+	scrollStop(); // need to disable scrolling before starting to avoid memory corrupt
+	command(VERTICALRIGHTHORIZONTALSCROLL);
+	command(0x00);
+	command(start);
+	command(0x7); // scroll speed frames , TODO
+	command(stop);
+	command(0x00);
+	command(0xFF);
+	command(ACTIVATESCROLL);
+}
+
+/** \brief Left scrolling.
+
+Set row start to row stop on the OLED to scroll left.
+*/
+void MicroOLED::scrollLeft(uint8_t start, uint8_t stop)
+{
+	if (stop < start) // stop must be larger or equal to start
+		return;
+	scrollStop(); // need to disable scrolling before starting to avoid memory corrupt
+	command(LEFT_HORIZONTALSCROLL);
+	command(0x00);
+	command(start);
+	command(0x7); // scroll speed frames , TODO
+	command(stop);
+	command(0x00);
+	command(0xFF);
+	command(ACTIVATESCROLL);
+}
+
+/** \brief Vert Left scrolling.
+
+Set row start to row stop on the OLED to scroll vert left.
+*/
+void MicroOLED::scrollVertLeft(uint8_t start, uint8_t stop)
+{
+	if (stop < start) // stop must be larger or equal to start
+		return;
+	scrollStop(); // need to disable scrolling before starting to avoid memory corrupt
+	command(VERTICALLEFTHORIZONTALSCROLL);
+	command(0x00);
+	command(start);
+	command(0x7); // scroll speed frames , TODO
+	command(stop);
+	command(0x00);
+	command(0xFF);
+	command(ACTIVATESCROLL);
+}
+
 /** \brief Vertical flip.
 
 Flip the graphics on the OLED vertically.
