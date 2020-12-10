@@ -1006,7 +1006,7 @@ void MicroOLED::scrollStop(void)
 
 /** \brief Right scrolling.
 
-Set row start to row stop on the OLED to scroll right. Refer to http://learn.microview.io/intro/general-overview-of-microview.html for explanation of the rows.
+Set row start to row stop on the OLED to scroll right.
 */
 void MicroOLED::scrollRight(uint8_t start, uint8_t stop, uint8_t scrollInterval)
 {
