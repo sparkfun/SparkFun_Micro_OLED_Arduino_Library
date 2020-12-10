@@ -1008,7 +1008,7 @@ void MicroOLED::scrollStop(void)
 
 Set row start to row stop on the OLED to scroll right. Refer to http://learn.microview.io/intro/general-overview-of-microview.html for explanation of the rows.
 */
-void MicroOLED::scrollRight(uint8_t start, uint8_t stop)
+void MicroOLED::scrollRight(uint8_t start, uint8_t stop, uint8_t scrollInterval)
 {
 	if (stop < start) // stop must be larger or equal to start
 		return;
@@ -1016,7 +1016,7 @@ void MicroOLED::scrollRight(uint8_t start, uint8_t stop)
 	command(RIGHTHORIZONTALSCROLL);
 	command(0x00);
 	command(start);
-	command(0x7); // scroll speed frames , TODO
+	command(scrollInterval);
 	command(stop);
 	command(0x00);
 	command(0xFF);
@@ -1027,7 +1027,7 @@ void MicroOLED::scrollRight(uint8_t start, uint8_t stop)
 
 Set row start to row stop on the OLED to scroll vert right.
 */
-void MicroOLED::scrollVertRight(uint8_t start, uint8_t stop)
+void MicroOLED::scrollVertRight(uint8_t start, uint8_t stop, uint8_t scrollInterval)
 {
 	if (stop < start) // stop must be larger or equal to start
 		return;
@@ -1035,10 +1035,9 @@ void MicroOLED::scrollVertRight(uint8_t start, uint8_t stop)
 	command(VERTICALRIGHTHORIZONTALSCROLL);
 	command(0x00);
 	command(start);
-	command(0x7); // scroll speed frames , TODO
+	command(scrollInterval);
 	command(stop);
-	command(0x00);
-	command(0xFF);
+	command(0x01); // Vertical scrolling offset
 	command(ACTIVATESCROLL);
 }
 
@@ -1046,7 +1045,7 @@ void MicroOLED::scrollVertRight(uint8_t start, uint8_t stop)
 
 Set row start to row stop on the OLED to scroll left.
 */
-void MicroOLED::scrollLeft(uint8_t start, uint8_t stop)
+void MicroOLED::scrollLeft(uint8_t start, uint8_t stop, uint8_t scrollInterval)
 {
 	if (stop < start) // stop must be larger or equal to start
 		return;
@@ -1054,7 +1053,7 @@ void MicroOLED::scrollLeft(uint8_t start, uint8_t stop)
 	command(LEFT_HORIZONTALSCROLL);
 	command(0x00);
 	command(start);
-	command(0x7); // scroll speed frames , TODO
+	command(scrollInterval);
 	command(stop);
 	command(0x00);
 	command(0xFF);
@@ -1065,7 +1064,7 @@ void MicroOLED::scrollLeft(uint8_t start, uint8_t stop)
 
 Set row start to row stop on the OLED to scroll vert left.
 */
-void MicroOLED::scrollVertLeft(uint8_t start, uint8_t stop)
+void MicroOLED::scrollVertLeft(uint8_t start, uint8_t stop, uint8_t scrollInterval)
 {
 	if (stop < start) // stop must be larger or equal to start
 		return;
@@ -1073,10 +1072,9 @@ void MicroOLED::scrollVertLeft(uint8_t start, uint8_t stop)
 	command(VERTICALLEFTHORIZONTALSCROLL);
 	command(0x00);
 	command(start);
-	command(0x7); // scroll speed frames , TODO
+	command(scrollInterval);
 	command(stop);
-	command(0x00);
-	command(0xFF);
+	command(0x01); // Vertical scrolling offset
 	command(ACTIVATESCROLL);
 }
 

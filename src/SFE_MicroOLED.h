@@ -102,6 +102,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define VERTICALRIGHTHORIZONTALSCROLL 0x29
 #define VERTICALLEFTHORIZONTALSCROLL 0x2A
 
+#define SCROLL_INTERVAL_5_FRAMES 0b000
+#define SCROLL_INTERVAL_64_FRAMES 0b001
+#define SCROLL_INTERVAL_128_FRAMES 0b010
+#define SCROLL_INTERVAL_256_FRAMES 0b011
+#define SCROLL_INTERVAL_3_FRAMES 0b100
+#define SCROLL_INTERVAL_4_FRAMES 0b101
+#define SCROLL_INTERVAL_25_FRAMES 0b110
+#define SCROLL_INTERVAL_2_FRAMES 0b111
+
 typedef enum CMD
 {
 	CMD_CLEAR,		  //0
@@ -194,10 +203,11 @@ public:
 	uint8_t getFontTotalChar(void);
 
 	// LCD Rotate Scroll functions
-	void scrollRight(uint8_t start, uint8_t stop);
-	void scrollLeft(uint8_t start, uint8_t stop);
-	void scrollVertRight(uint8_t start, uint8_t stop);
-	void scrollVertLeft(uint8_t start, uint8_t stop);
+	// start and stop are PAGE addresses: 0-7
+	void scrollRight(uint8_t start, uint8_t stop, uint8_t scrollInterval = SCROLL_INTERVAL_2_FRAMES);
+	void scrollLeft(uint8_t start, uint8_t stop, uint8_t scrollInterval = SCROLL_INTERVAL_2_FRAMES);
+	void scrollVertRight(uint8_t start, uint8_t stop, uint8_t scrollInterval = SCROLL_INTERVAL_2_FRAMES);
+	void scrollVertLeft(uint8_t start, uint8_t stop, uint8_t scrollInterval = SCROLL_INTERVAL_2_FRAMES);
 	void scrollStop(void);
 	void flipVertical(boolean flip);
 	void flipHorizontal(boolean flip);
