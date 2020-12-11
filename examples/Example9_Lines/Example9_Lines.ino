@@ -21,7 +21,7 @@
 #include <SFE_MicroOLED.h> //Click here to get the library: http://librarymanager/All#SparkFun_Micro_OLED
 
 #define PIN_RESET 9
-#define DC_JUMPER 0
+#define DC_JUMPER 1
 MicroOLED oled(PIN_RESET, DC_JUMPER); // I2C declaration
 
 void setup()
@@ -32,7 +32,7 @@ void setup()
   Serial.begin(115200);
   Serial.println(F("Micro OLED Example"));
 
-  oled.enableDebugging(); // Uncomment this line to enable debug messages on Serial
+  //oled.enableDebugging(); // Uncomment this line to enable debug messages on Serial
 
   oled.begin();    // Initialize the OLED
   oled.clear(ALL); // Clear the display's internal memory
