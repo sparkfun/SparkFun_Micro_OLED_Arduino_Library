@@ -612,6 +612,14 @@ void MicroOLED::line(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t col
 		_debugPort->println(dy);
 	}
 
+	if ((dx == 0) && (dy == 0))
+	{
+		if (_printDebug == true)
+			_debugPort->print(F("line: zero length!"));
+		pixel(x0, y0, color, mode);
+		return;
+	}
+
 	int8_t err = dx / 2;
 	int8_t ystep;
 
