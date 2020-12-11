@@ -53,7 +53,7 @@ void setup()
 /*
   // This is the new way of initializing the OLED.
   // We can pass a different I2C address and TwoWire port
-  oled.begin(0x3D, Qwiic);    // Initialize the OLED
+  oled.begin(0x3C, Qwiic);    // Initialize the OLED
 */
 
 
