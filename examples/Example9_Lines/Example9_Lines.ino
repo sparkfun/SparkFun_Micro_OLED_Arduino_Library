@@ -32,7 +32,7 @@ void setup()
   Serial.begin(115200);
   Serial.println(F("Micro OLED Example"));
 
-  //oled.enableDebugging(); // Uncomment this line to enable debug messages on Serial
+  oled.enableDebugging(); // Uncomment this line to enable debug messages on Serial
 
   oled.begin();    // Initialize the OLED
   oled.clear(ALL); // Clear the display's internal memory
@@ -41,6 +41,11 @@ void setup()
   int MIDDLE_X = oled.getLCDWidth() / 2; // Find the centre of the display
   int MIDDLE_Y = oled.getLCDHeight() / 2;
 
+  oled.clear(PAGE);
+  oled.line(MIDDLE_X, MIDDLE_Y, MIDDLE_X, MIDDLE_Y); // Zero length
+  oled.display();
+  delay(500);
+  
   oled.clear(PAGE);
   oled.line(MIDDLE_X - 10, MIDDLE_Y - 20, MIDDLE_X + 10, MIDDLE_Y + 20); // Steep x0<x1
   oled.display();
