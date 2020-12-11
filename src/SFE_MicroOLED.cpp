@@ -69,13 +69,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TOTALFONTS 4
 #endif
 
-#define swapOLED(a, b) \
-	{                  \
-		uint8_t t = a; \
-		a = b;         \
-		b = t;         \
-	}
-
 // Add the font name as declared in the header file.  Remove as many as possible to conserve FLASH memory.
 const unsigned char *MicroOLED::fontsPointer[] = {
 	font5x7, font8x16, sevensegment, fontlargenumber
@@ -270,6 +263,14 @@ void MicroOLED::begin()
 
 	command(DISPLAYON); //--turn on oled panel
 	clear(ALL);			// Erase hardware memory inside the OLED controller to avoid random data in memory.
+}
+
+//Calling this function with nothing sets the debug port to Serial
+//You can also call it with other streams like Serial1, SerialUSB, etc.
+void MicroOLED::enableDebugging(Stream &debugPort)
+{
+	_debugPort = &debugPort;
+	_printDebug = true;
 }
 
 /** \brief Send the display a command byte
@@ -556,25 +557,69 @@ Draw line using color and mode from x0,y0 to x1,y1 of the screen buffer.
 */
 void MicroOLED::line(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t color, uint8_t mode)
 {
+	if (_printDebug == true)
+	{
+		_debugPort->print(F("line: line coords: ("));
+		_debugPort->print(x0);
+		_debugPort->print(F(","));
+		_debugPort->print(y0);
+		_debugPort->print(F(") ("));
+		_debugPort->print(x1);
+		_debugPort->print(F(","));
+		_debugPort->print(y1);
+		_debugPort->println(F(")"));
+	}
+
 	uint8_t steep = abs(y1 - y0) > abs(x1 - x0);
 	if (steep)
 	{
-		swapOLED(x0, y0);
-		swapOLED(x1, y1);
-	}
+		swapOLED(&x0, &y0);
+		swapOLED(&x1, &y1);
+		if (_printDebug == true)
+			_debugPort->println(F("line: line is steep"));
+}
 
 	if (x0 > x1)
 	{
-		swapOLED(x0, x1);
-		swapOLED(y0, y1);
+		swapOLED(&x0, &x1);
+		swapOLED(&y0, &y1);
+		if (_printDebug == true)
+			_debugPort->println(F("line: x0 > x1"));
 	}
+
+	// if (_printDebug == true)
+	// {
+	// 	_debugPort->print(F("line: line coords: ("));
+	// 	_debugPort->print(x0);
+	// 	_debugPort->print(F(","));
+	// 	_debugPort->print(y0);
+	// 	_debugPort->print(F(") ("));
+	// 	_debugPort->print(x1);
+	// 	_debugPort->print(F(","));
+	// 	_debugPort->print(y1);
+	// 	_debugPort->println(F(")"));
+	// }
 
 	uint8_t dx, dy;
 	dx = x1 - x0;
 	dy = abs(y1 - y0);
 
+	if (_printDebug == true)
+	{
+		_debugPort->print(F("line: dx: "));
+		_debugPort->print(dx);
+		_debugPort->print(F("  dy: "));
+		_debugPort->println(dy);
+	}
+
 	int8_t err = dx / 2;
 	int8_t ystep;
+
+	if (_printDebug == true)
+	{
+		_debugPort->print(F("line: err: "));
+		_debugPort->println(err);
+	}
 
 	if (y0 < y1)
 	{
@@ -585,15 +630,37 @@ void MicroOLED::line(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t col
 		ystep = -1;
 	}
 
-	for (; x0 < x1; x0++)
+	if (_printDebug == true)
+	{
+		_debugPort->print(F("line: ystep: "));
+		_debugPort->println(ystep);
+	}
+
+	for (; x0 <= x1; x0++)
 	{
 		if (steep)
 		{
 			pixel(y0, x0, color, mode);
+			if (_printDebug == true)
+			{
+				_debugPort->print(F("line: steep pixel: ("));
+				_debugPort->print(y0);
+				_debugPort->print(F(","));
+				_debugPort->print(x0);
+				_debugPort->println(F(")"));
+			}
 		}
 		else
 		{
 			pixel(x0, y0, color, mode);
+			if (_printDebug == true)
+			{
+				_debugPort->print(F("line: pixel: ("));
+				_debugPort->print(x0);
+				_debugPort->print(F(","));
+				_debugPort->print(y0);
+				_debugPort->println(F(")"));
+			}
 		}
 		err -= dy;
 		if (err < 0)
@@ -1192,4 +1259,11 @@ void MicroOLED::setI2CTransactionSize(uint8_t transactionSize)
 uint8_t MicroOLED::getI2CTransactionSize(void)
 {
   return (i2cTransactionSize);
+}
+
+void MicroOLED::swapOLED(uint8_t *x, uint8_t *y)
+{
+	uint8_t t = *x;
+	*x = *y;
+	*y = t;
 }

@@ -154,6 +154,8 @@ public:
 	void begin(void);
 	virtual size_t write(uint8_t);
 
+	void enableDebugging(Stream &debugPort = Serial); //Turn on debug printing. If user doesn't specify then Serial will be used.
+
 	// RAW LCD functions
 	void command(uint8_t c);
 	void data(uint8_t c);
@@ -231,6 +233,11 @@ private:
 	uint8_t foreColor, drawMode, fontWidth, fontHeight, fontType, fontStartChar, fontTotalChar, cursorX, cursorY;
 	uint16_t fontMapWidth;
 	static const unsigned char *fontsPointer[];
+	void swapOLED(uint8_t *x, uint8_t *y);
+
+	//Debug
+	Stream *_debugPort;			 //The stream to send debug messages to if enabled. Usually Serial.
+	boolean _printDebug = false; //Flag to print debugging variables
 
 	// Communication
 	void spiTransfer(byte data);
