@@ -49,7 +49,7 @@ allows alternate ports to be used, in a way which is backward-compatible with th
 We have of course tested the new code, but if you do notice any compatibility issues please
 [raise an issue](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/issues).
 
-### I2C Example
+### I<sup>2</sup>C Example
 
 Prior to v1.3, you would have used:
 ```
