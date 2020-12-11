@@ -40,8 +40,15 @@ Contributing
 
 If you would like to contribute to this library: please do, we truly appreciate it, but please follow [these guidelines](./CONTRIBUTING.md). Thanks!
 
+MicroOLED: Version 1.3 - A New Hope
+---------------
+
+Prior to version 1.3, this library was hard-wired to the ```Wire``` I<sup>2</sup>C and ```SPI``` ports. Version 1.3
+allows alternate ports to be used, in a way which is backward-compatible with the previous versions.
+
 Version History
 ---------------
+
 * [v 1.2.10](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.10) - prevent-write-outside-buffer corrections; improved I2C transfer speeds; includes the missing scroll functions; ```line``` corrections; ```enableDebugging```.
 * [v 1.2.9](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.9) - drawIcon() correction
 * [v 1.2.8](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1%2C2.8) - Add drawIcon() and resort examples with Qwiic as default.
