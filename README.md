@@ -49,11 +49,11 @@ allows alternate ports to be used, in a way which is backward-compatible with th
 We have of course tested the new code, but if you do notice any compatibility issues please
 [raise an issue](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/issues).
 
-## I2C Example
+### I2C Example
 
 Prior to v1.3, you would have used:
 ```
-#define DC_JUMPER 0
+#define DC_JUMPER 1
 MicroOLED oled(PIN_RESET, DC_JUMPER); // I2C declaration
 ```
 
@@ -77,7 +77,7 @@ To use a non-standard address or port, you can call:
 oled.begin(0x3D, Qwiic);    // Initialize the OLED using address 0x3D and the Qwiic port
 ```
 
-## SPI Example
+### SPI Example
 
 For SPI in v1.3, you still need to instantiate the oled using:
 ```
