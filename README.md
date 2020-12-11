@@ -69,12 +69,12 @@ MicroOLED oled(PIN_RESET); // The TwoWire I2C port is passed to .begin instead
 
 followed by:
 ```
-oled.begin(0x3C, Wire);    // Initialize the OLED using address 0x3C and the Wire port
+oled.begin(0x3D, Wire);    // Initialize the OLED using address 0x3D and the Wire port
 ```
 
 To use a non-standard address or port, you can call:
 ```
-oled.begin(0x3D, Qwiic);    // Initialize the OLED using address 0x3D and the Qwiic port
+oled.begin(0x3C, Qwiic);    // Initialize the OLED using address 0x3C and the Qwiic port
 ```
 
 ### SPI Example
@@ -97,6 +97,7 @@ To use a non-standard port, call:
 Version History
 ---------------
 
+* [v 1.3.0](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.3.0) - adding support for non-standard I<sup>2</sup>C and SPI ports
 * [v 1.2.10](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.10) - prevent-write-outside-buffer corrections; improved I2C transfer speeds; includes the missing scroll functions; ```line``` corrections; ```enableDebugging```.
 * [v 1.2.9](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.9) - drawIcon() correction
 * [v 1.2.8](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1%2C2.8) - Add drawIcon() and resort examples with Qwiic as default.
