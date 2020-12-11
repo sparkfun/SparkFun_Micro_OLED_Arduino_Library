@@ -44,7 +44,7 @@ Version History
 ---------------
 * [v 1.2.10](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.10) - prevent-write-outside-buffer corrections; improved I2C transfer speeds; includes the missing scroll functions; ```line``` corrections; ```enableDebugging```.
 * [v 1.2.9](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.9) - drawIcon() correction
-* [v 1,2.8](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.8) - Add drawIcon() and resort examples with Qwiic as default.
+* [v 1.2.8](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1%2C2.8) - Add drawIcon() and resort examples with Qwiic as default.
 * [v 1.2.7](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.7) - Add more comments and Wire.begin() to examples
 * [v 1.2.6](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/V_1.2.6) - Removes call of Wire.begin from library
 * [v 1.2.5](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.5) - Adding Qwiic Examples for I2C
