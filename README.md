@@ -35,6 +35,11 @@ Products that use this Library
 * [Micro OLED Breakout](https://www.sparkfun.com/products/13003)- A breakout for the monochrome 64x48 OLED.
 * [Micro OLED Breakout (Qwiic)](https://www.sparkfun.com/products/14532) - Qwiic version of the Micro OLED breakout with jumpers set for I2C
 
+Contributing
+--------------
+
+If you would like to contribute to this library: please do, we truly appreciate it, but please follow [these guidelines](./CONTRIBUTING.md). Thanks!
+
 Version History
 ---------------
 * [v 1.2.10](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.10) - prevent-write-outside-buffer corrections; improved I2C transfer speeds; includes the missing scroll functions; ```line``` corrections; ```enableDebugging```.
