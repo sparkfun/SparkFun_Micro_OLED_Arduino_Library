@@ -62,7 +62,7 @@ License Information
 
 This product is _**open source**_!
 
-The **code** is released under the GPL v3 license. See the included LICENSE.md for more information.
+Please see [LICENSE.md](./LICENSE.md) for more information.
 
 Distributed as-is; no warranty is given.
 
