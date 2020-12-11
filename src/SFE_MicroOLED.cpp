@@ -138,6 +138,18 @@ static uint8_t screenmemory[] = {
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
+/** \brief MicroOLED Constructor -- I2C - leaving the address currently undefined
+
+	Setup the MicroOLED class, assuming that the I2C address will be defined later.
+*/
+MicroOLED::MicroOLED(uint8_t rst)
+{
+	// Assign each of the parameters to a private class variable.
+	rstPin = rst;
+	moled_interface = MOLED_MODE_I2C; // Set interface to I2C
+	moled_i2c_address = I2C_ADDRESS_UNDEFINED; // Flag that the I2C address is undefined
+}
+
 /** \brief MicroOLED Constructor -- SPI Mode
 
 	Setup the MicroOLED class, configure the display to be controlled via a
@@ -149,7 +161,8 @@ MicroOLED::MicroOLED(uint8_t rst, uint8_t dc, uint8_t cs)
 	rstPin = rst;
 	dcPin = dc;
 	csPin = cs;
-	interface = MODE_SPI; // Set interface mode to SPI
+	moled_interface = MOLED_MODE_SPI; // Set interface mode to SPI
+	//_spiPort will be initialized by spiSetup
 }
 
 /** \brief MicroOLED Constructor -- I2C Mode
@@ -160,14 +173,15 @@ MicroOLED::MicroOLED(uint8_t rst, uint8_t dc, uint8_t cs)
 MicroOLED::MicroOLED(uint8_t rst, uint8_t dc)
 {
 	rstPin = rst;		  // Assign reset pin to private class variable
-	interface = MODE_I2C; // Set interface to I2C
+	moled_interface = MOLED_MODE_I2C; // Set interface to I2C
 	// Set the I2C Address based on whether DC is high (1) or low (0).
 	// The pin is pulled low by default, so if it's not explicitly set to
 	// 1, just default to 0.
 	if (dc == 1)
-		i2c_address = I2C_ADDRESS_SA0_1;
+		moled_i2c_address = I2C_ADDRESS_SA0_1;
 	else
-		i2c_address = I2C_ADDRESS_SA0_0;
+		moled_i2c_address = I2C_ADDRESS_SA0_0;
+	//_i2cPort will be initialized by i2cSetup
 }
 
 /** \brief MicroOLED Constructor -- Parallel Mode
@@ -179,7 +193,7 @@ MicroOLED::MicroOLED(uint8_t rst, uint8_t dc, uint8_t cs, uint8_t wr, uint8_t rd
 					 uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
 					 uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7)
 {
-	interface = MODE_PARALLEL; // Set to parallel mode
+	moled_interface = MOLED_MODE_PARALLEL; // Set to parallel mode
 	// Assign pin parameters to private class variables.
 	rstPin = rst;
 	dcPin = dc;
@@ -198,25 +212,73 @@ MicroOLED::MicroOLED(uint8_t rst, uint8_t dc, uint8_t cs, uint8_t wr, uint8_t rd
 
 /** \brief Initialisation of MicroOLED Library.
 
-    Setup IO pins for SPI port then send initialisation commands to the SSD1306 controller inside the OLED.
+    Setup for the chosen interface then send initialisation commands to the SSD1306 controller inside the OLED.
 */
-void MicroOLED::begin()
+boolean MicroOLED::begin()
+{
+	// Set up the selected interface:
+	if (moled_interface == MOLED_MODE_SPI)
+		spiSetup();
+	else if (moled_interface == MOLED_MODE_I2C)
+		i2cSetup();
+	else if (moled_interface == MOLED_MODE_PARALLEL)
+		parallelSetup();
+	else //if (moled_interface == MOLED_MODE_UNDEFINED)
+		return (false);
+
+	// Trap if the user instantiated with MicroOLED oled(PIN_RESET) and then called
+	// .begin instead of .begin(uint8_t deviceAddress, TwoWire &wirePort)
+	if ((moled_interface == MOLED_MODE_I2C) && (moled_i2c_address == I2C_ADDRESS_UNDEFINED))
+	{
+		if (_printDebug == true)
+		{
+			_debugPort->println(F("begin: error! deviceAddress is I2C_ADDRESS_UNDEFINED!"));
+			_debugPort->println(F("begin: Did you forget to call .begin(uint8_t deviceAddress, TwoWire &wirePort)?"));
+		}
+		return (false);
+	}
+
+	beginCommon();
+	return (true);
+}
+
+/** \brief Initialisation of MicroOLED Library.
+
+    Setup IO pins for the SPI interface then send initialisation commands to the SSD1306 controller inside the OLED.
+*/
+boolean MicroOLED::begin(SPIClass &spiPort)
+{
+	// Set up the selected interface:
+	spiSetup(spiPort);
+
+	beginCommon();
+	return (true);
+}
+
+/** \brief Initialisation of MicroOLED Library.
+
+    Setup IO pins for the I2C interface then send initialisation commands to the SSD1306 controller inside the OLED.
+*/
+boolean MicroOLED::begin(uint8_t deviceAddress, TwoWire &wirePort)
+{
+	// Set up the selected interface:
+	i2cSetup(deviceAddress, wirePort);
+
+	beginCommon();
+	return (true);
+}
+
+/** \brief Initialisation of MicroOLED Library - common to all begin methods. PRIVATE.
+
+    Setup IO pins for the chosen interface then send initialisation commands to the SSD1306 controller inside the OLED.
+*/
+void MicroOLED::beginCommon()
 {
 	// default 5x7 font
 	setFontType(0);
 	setColor(WHITE);
 	setDrawMode(NORM);
 	setCursor(0, 0);
-
-	pinMode(rstPin, OUTPUT);
-
-	// Set up the selected interface:
-	if (interface == MODE_SPI)
-		spiSetup();
-	else if (interface == MODE_I2C)
-		i2cSetup();
-	else if (interface == MODE_PARALLEL)
-		parallelSetup();
 
 	// Display reset routine
 	pinMode(rstPin, OUTPUT);	// Set RST pin as OUTPUT
@@ -283,19 +345,19 @@ void MicroOLED::enableDebugging(Stream &debugPort)
 void MicroOLED::command(uint8_t c)
 {
 
-	if (interface == MODE_SPI)
+	if (moled_interface == MOLED_MODE_SPI)
 	{
 		digitalWrite(dcPin, LOW);
 		;				// DC pin LOW for a command
 		spiTransfer(c); // Transfer the command byte
 	}
-	else if (interface == MODE_I2C)
+	else if (moled_interface == MOLED_MODE_I2C)
 	{
 		// Write to our address, make sure it knows we're sending a
 		// command:
-		i2cWrite(i2c_address, I2C_COMMAND, c);
+		i2cWrite(moled_i2c_address, I2C_COMMAND, c);
 	}
-	else if (interface == MODE_PARALLEL)
+	else if (moled_interface == MOLED_MODE_PARALLEL)
 	{
 		// Write the byte to our parallel interface. Set DC LOW.
 		parallelWrite(c, LOW);
@@ -312,19 +374,19 @@ void MicroOLED::command(uint8_t c)
 void MicroOLED::data(uint8_t c)
 {
 
-	if (interface == MODE_SPI)
+	if (moled_interface == MOLED_MODE_SPI)
 	{
 		digitalWrite(dcPin, HIGH); // DC HIGH for a data byte
 
 		spiTransfer(c); // Transfer the data byte
 	}
-	else if (interface == MODE_I2C)
+	else if (moled_interface == MOLED_MODE_I2C)
 	{
 		// Write to our address, make sure it knows we're sending a
 		// data byte:
-		i2cWrite(i2c_address, I2C_DATA, c);
+		i2cWrite(moled_i2c_address, I2C_DATA, c);
 	}
-	else if (interface == MODE_PARALLEL)
+	else if (moled_interface == MOLED_MODE_PARALLEL)
 	{
 		// Write the byte to our parallel interface. Set DC HIGH.
 		parallelWrite(c, HIGH);
@@ -366,11 +428,11 @@ void MicroOLED::clear(uint8_t mode)
 		{
 			setPageAddress(i);
 			setColumnAddress(0);
-			if (interface == MODE_I2C)
+			if (moled_interface == MOLED_MODE_I2C)
 			{
 				uint8_t zeros[0x80];
 				memset(zeros, 0, 0x80);
-				i2cWriteMultiple(i2c_address, (uint8_t *)&zeros, 0x80);
+				i2cWriteMultiple(moled_i2c_address, (uint8_t *)&zeros, 0x80);
 			}
 			else
 			{
@@ -401,11 +463,11 @@ void MicroOLED::clear(uint8_t mode, uint8_t c)
 		{
 			setPageAddress(i);
 			setColumnAddress(0);
-			if (interface == MODE_I2C)
+			if (moled_interface == MOLED_MODE_I2C)
 			{
 				uint8_t zeros[0x80];
 				memset(zeros, c, 0x80);
-				i2cWriteMultiple(i2c_address, (uint8_t *)&zeros, 0x80);
+				i2cWriteMultiple(moled_i2c_address, (uint8_t *)&zeros, 0x80);
 			}
 			else
 			{
@@ -457,9 +519,9 @@ void MicroOLED::display(void)
 	{
 		setPageAddress(i);
 		setColumnAddress(0);
-		if (interface == MODE_I2C)
+		if (moled_interface == MOLED_MODE_I2C)
 		{
-			i2cWriteMultiple(i2c_address, (uint8_t *)&screenmemory[i * 0x40], 0x40);
+			i2cWriteMultiple(moled_i2c_address, (uint8_t *)&screenmemory[i * 0x40], 0x40);
 		}
 		else
 		{

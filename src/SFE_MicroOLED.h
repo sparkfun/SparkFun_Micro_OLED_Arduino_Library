@@ -41,6 +41,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdio.h>
 #include <Arduino.h>
 
+#include <Wire.h> // Needed for TwoWire - even if we are using SPI or Parallel
+#include <SPI.h> // Needed for SPIClass - even if we are using I2C or Parallel
+
 #if defined(__AVR__) || defined(__arm__) || defined(__ARDUINO_ARC__)
 #include <avr/pgmspace.h>
 #else
@@ -49,6 +52,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define I2C_ADDRESS_SA0_0 0b0111100
 #define I2C_ADDRESS_SA0_1 0b0111101
+#define I2C_ADDRESS_UNDEFINED 0b00000000
 #define I2C_COMMAND 0x00
 #define I2C_DATA 0x40
 
@@ -136,23 +140,28 @@ typedef enum CMD
 
 typedef enum COMM_MODE
 {
-	MODE_SPI,
-	MODE_I2C,
-	MODE_PARALLEL
+	MOLED_MODE_SPI,
+	MOLED_MODE_I2C,
+	MOLED_MODE_PARALLEL,
+	MOLED_MODE_UNDEFINED
 } micro_oled_mode;
 
 class MicroOLED : public Print
 {
 public:
 	// Constructor(s)
-	MicroOLED(uint8_t rst, uint8_t dc, uint8_t cs);
-	MicroOLED(uint8_t rst, uint8_t dc);
+	MicroOLED(uint8_t rst); // I2C - leaving the address currently undefined
+	MicroOLED(uint8_t rst, uint8_t dc); // I2C
+	MicroOLED(uint8_t rst, uint8_t dc, uint8_t cs); // SPI
 	MicroOLED(uint8_t rst, uint8_t dc, uint8_t cs, uint8_t wr, uint8_t rd,
 			  uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
-			  uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
+			  uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7); // Parallel
 
-	void begin(void);
-	virtual size_t write(uint8_t);
+	boolean begin(void); // Needed for backward-compatibility
+	boolean begin(uint8_t deviceAddress, TwoWire &wirePort); // User-defined I2C address and TwoWire
+	boolean begin(SPIClass &spiPort); // User-defined SPIClass
+
+	virtual size_t write(uint8_t); // Virtual - for I2C _or_ SPI
 
 	void enableDebugging(Stream &debugPort = Serial); //Turn on debug printing. If user doesn't specify then Serial will be used.
 
@@ -226,8 +235,8 @@ private:
 	uint8_t wrPin, rdPin, dPins[8];
 	volatile uint8_t *wrport, *wrreg, *rdport, *rdreg;
 	uint8_t wrpinmask, rdpinmask;
-	micro_oled_mode interface;
-	byte i2c_address;
+	micro_oled_mode moled_interface = MOLED_MODE_UNDEFINED;
+	byte moled_i2c_address = I2C_ADDRESS_UNDEFINED;
 	volatile uint8_t *ssport, *dcport, *ssreg, *dcreg; // use volatile because these are fixed location port address
 	uint8_t mosipinmask, sckpinmask, sspinmask, dcpinmask;
 	uint8_t foreColor, drawMode, fontWidth, fontHeight, fontType, fontStartChar, fontTotalChar, cursorX, cursorY;
@@ -239,13 +248,19 @@ private:
 	Stream *_debugPort;			 //The stream to send debug messages to if enabled. Usually Serial.
 	boolean _printDebug = false; //Flag to print debugging variables
 
+	void beginCommon(); // Functionality common to all begin methods
+
 	// Communication
 	void spiTransfer(byte data);
-	void spiSetup();
-	void i2cSetup();
+	void spiSetup(SPIClass &spiPort = SPI);
+	void i2cSetup(uint8_t deviceAddress = I2C_ADDRESS_UNDEFINED, TwoWire &wirePort = Wire);
 	void i2cWrite(byte address, byte control, byte data);
 	boolean i2cWriteMultiple(byte address, uint8_t *dataBytes, size_t numDataBytes);
 	void parallelSetup();
 	void parallelWrite(byte data, byte dc);
+
+	TwoWire *_i2cPort;		//The generic connection to user's chosen I2C hardware
+
+	SPIClass *_spiPort;			 //The generic connection to user's chosen SPI hardware
 };
 #endif

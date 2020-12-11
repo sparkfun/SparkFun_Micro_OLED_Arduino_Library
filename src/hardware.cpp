@@ -35,8 +35,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
 
 #include "SFE_MicroOLED.h"
-#include <SPI.h>
-#include <Wire.h>
+//#include <SPI.h> - included in SFE_MicroOLED.h
+//#include <Wire.h> - included in SFE_MicroOLED.h
 
 // Configure SPI settings - Max clk frequency for display is 10MHz
 SPISettings oledSettings(10000000, MSBFIRST, SPI_MODE0);
@@ -45,7 +45,7 @@ SPISettings oledSettings(10000000, MSBFIRST, SPI_MODE0);
 
 	Sets up the SPI pins, initializes the Arduino's SPI interface.
 **/
-void MicroOLED::spiSetup()
+void MicroOLED::spiSetup(SPIClass &spiPort)
 {
 	// Initialize the pins:
 	pinMode(dcPin, OUTPUT);	   //dc Is used for SPI and parallel interfaces but not I2C
@@ -57,7 +57,9 @@ void MicroOLED::spiSetup()
 #if defined(__AVR__)
 	pinMode(10, OUTPUT); // Required for setting into Master mode
 #endif
-	SPI.begin();
+	_spiPort = &spiPort;
+	_spiPort->begin();
+	moled_interface = MOLED_MODE_SPI; // Just in case moled_interface was undefined
 }
 
 /** \brief Transfer a byte over SPI
@@ -67,20 +69,23 @@ void MicroOLED::spiSetup()
 **/
 void MicroOLED::spiTransfer(byte data)
 {
-	SPI.beginTransaction(oledSettings);
+	_spiPort->beginTransaction(oledSettings);
 	digitalWrite(csPin, LOW);
-	SPI.transfer(data);
+	_spiPort->transfer(data);
 	digitalWrite(csPin, HIGH);
-	SPI.endTransaction();
+	_spiPort->endTransaction();
 }
 
 /** \brief Initialize the I2C Interface
 
-	This function initializes the I2C peripheral. It also sets up the
-	I2C clock frequency.
+	This function initializes the I2C peripheral.
 **/
-void MicroOLED::i2cSetup()
+void MicroOLED::i2cSetup(uint8_t deviceAddress, TwoWire &wirePort)
 {
+	_i2cPort = &wirePort;
+	if (deviceAddress != I2C_ADDRESS_UNDEFINED)
+		moled_i2c_address = deviceAddress;
+	moled_interface = MOLED_MODE_I2C; // Just in case moled_interface was undefined
 }
 
 /** \brief  Write a byte over I2C
@@ -91,10 +96,10 @@ void MicroOLED::i2cSetup()
 **/
 void MicroOLED::i2cWrite(byte address, byte dc, byte data)
 {
-	Wire.beginTransmission(address);
-	Wire.write(dc); // If data dc = 0, if command dc = 0x40
-	Wire.write(data);
-	Wire.endTransmission();
+	_i2cPort->beginTransmission(address);
+	_i2cPort->write(dc); // If data dc = 0, if command dc = 0x40
+	_i2cPort->write(data);
+	_i2cPort->endTransmission();
 }
 
 /** \brief  Write multiple data bytes over I2C
@@ -116,9 +121,9 @@ boolean MicroOLED::i2cWriteMultiple(uint8_t address, uint8_t *dataBytes, size_t 
     else
       bytesToWrite = bytesLeftToWrite;
 
-    Wire.beginTransmission(address);
-		Wire.write(I2C_DATA);
-    size_t bytesWritten = Wire.write(dataBytes, bytesToWrite); // Write the bytes
+    _i2cPort->beginTransmission(address);
+		_i2cPort->write(I2C_DATA);
+    size_t bytesWritten = _i2cPort->write(dataBytes, bytesToWrite); // Write the bytes
 
     bytesWrittenTotal += bytesWritten; // Update the totals
     bytesLeftToWrite -= bytesToWrite;
@@ -126,12 +131,12 @@ boolean MicroOLED::i2cWriteMultiple(uint8_t address, uint8_t *dataBytes, size_t 
 
     if (bytesLeftToWrite > 0)
     {
-      if (Wire.endTransmission(false) != 0) //Send a restart command. Do not release bus.
+      if (_i2cPort->endTransmission(false) != 0) //Send a restart command. Do not release bus.
         return (false);                          //Sensor did not ACK
     }
     else
     {
-      if (Wire.endTransmission() != 0) //We're done. Release bus.
+      if (_i2cPort->endTransmission() != 0) //We're done. Release bus.
         return (false);                     //Sensor did not ACK
     }
   }
@@ -157,6 +162,8 @@ void MicroOLED::parallelSetup()
 	digitalWrite(csPin, HIGH);
 	for (int i = 0; i < 8; i++)
 		pinMode(dPins[i], OUTPUT);
+
+	moled_interface = MOLED_MODE_PARALLEL; // Just in case moled_interface was undefined
 }
 
 /** \brief Write a byte over the parallel interface
