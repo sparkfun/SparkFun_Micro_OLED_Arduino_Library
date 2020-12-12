@@ -35,6 +35,7 @@ void setup()
 {
   delay(100);
   Wire.begin(); // <-- Change this to (e.g.) Qwiic.begin(); as required
+  //Wire.setClock(400000); // Uncomment this line to increase the I2C bus speed to 400kHz
 
 
 /*
