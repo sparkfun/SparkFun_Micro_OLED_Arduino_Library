@@ -7,9 +7,16 @@
   using the begin function defined in version v1.3 of the library - which allows different
   TwoWire ports and custom I2C addresses to be used.
 
+  If you are using the standard Micro OLED display, its I2C address will be 0x3D or 0x3C
+  depending on how you have the D/C or ADDR jumper configured.
+
   Hardware Connections:
     This example assumes you are using Qwiic. See the SPI examples for
     a detailed breakdown of connection info.
+
+  Want to support open source hardware? Buy a board from SparkFun!
+  https://www.sparkfun.com/products/13003
+  https://www.sparkfun.com/products/14532
 
   This code is beerware; if you see me (or any other SparkFun employee) at the
   local, and you've found our code helpful, please buy us a round!
