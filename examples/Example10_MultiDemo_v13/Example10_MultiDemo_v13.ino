@@ -34,7 +34,7 @@ MicroOLED oled(PIN_RESET); // The TwoWire I2C port is passed to .begin instead
 void setup()
 {
   delay(100);
-  Wire.begin();
+  Wire.begin(); // <-- Change this to (e.g.) Qwiic.begin(); as required
 
 
 /*
