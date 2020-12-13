@@ -58,10 +58,10 @@ void setup()
 */
 
   // This is the new way of initializing the OLED.
-  // We can use a different SPIClass is we want to
+  // We can use a different SPIClass if we want to
   oled.begin(SPI1);    // Initialize the OLED using SPI1
 
-  
+
   oled.clear(ALL); // Clear the display's internal memory
   oled.display();  // Display what's in the buffer (splashscreen)
   delay(1000);     // Delay 1000 ms

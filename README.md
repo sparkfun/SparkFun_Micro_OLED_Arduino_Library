@@ -77,6 +77,8 @@ To use a non-standard address or port, you can call:
 oled.begin(0x3C, Qwiic);    // Initialize the OLED using address 0x3C and the Qwiic port
 ```
 
+Please see [this example](./examples/Example10_MultiDemo_v13/Example10_MultiDemo_v13.ino) for more details.
+
 ### SPI Example
 
 For SPI in v1.3, you still need to instantiate the oled using:
@@ -93,6 +95,8 @@ To use a non-standard port, call:
 ```
   oled.begin(SPI1);    // Initialize the OLED using SPI1
 ```
+
+Please see [this example](./examples/SPI/MicroOLED_Demo_v13/MicroOLED_Demo_v13.ino) for more details.
 
 Version History
 ---------------
