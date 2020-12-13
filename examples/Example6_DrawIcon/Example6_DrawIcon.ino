@@ -2,16 +2,16 @@
   Micro OLED Display Icon
   Nathan Seidle @ SparkFun Electronics
   Original Creation Date: November 15, 2020
-  
-  Draw a variable sized icon anywhere on the display. This is helpful 
+
+  Draw a variable sized icon anywhere on the display. This is helpful
   when you need a icon (GPS, battery, etc) on a certain part of the screen.
 
   This example assumes an I2C connection (Qwiic)
-  
-  This code is beerware; if you see me (or any other SparkFun 
-  employee) at the local, and you've found our code helpful, 
+
+  This code is beerware; if you see me (or any other SparkFun
+  employee) at the local, and you've found our code helpful,
   please buy us a round!
-  
+
   Distributed as-is; no warranty is given.
 */
 #include <Wire.h>
@@ -79,6 +79,13 @@ void setup()
   Serial.begin(115200);
   delay(100);
   Serial.println("Display Icon OLED example");
+
+  // Some unbranded displays seem to need a reset before they can be detected successfully:
+  pinMode(PIN_RESET, OUTPUT);
+  digitalWrite(PIN_RESET, LOW);
+  delay(100);
+  digitalWrite(PIN_RESET, HIGH);
+  delay(100);
 
   //0x3D is default address on Qwiic board
   if (isConnected(0x3D) == true || isConnected(0x3C) == true)
