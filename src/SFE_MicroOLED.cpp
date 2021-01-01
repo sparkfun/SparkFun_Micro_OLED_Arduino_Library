@@ -283,9 +283,9 @@ void MicroOLED::beginCommon()
 	// Display reset routine
 	pinMode(rstPin, OUTPUT);	// Set RST pin as OUTPUT
 	digitalWrite(rstPin, HIGH); // Initially set RST HIGH
-	delay(5);					// VDD (3.3V) goes high at start, lets just chill for 5 ms
+	_delay_ms(5);					// VDD (3.3V) goes high at start, lets just chill for 5 ms
 	digitalWrite(rstPin, LOW);	// Bring RST low, reset the display
-	delay(10);					// wait 10ms
+	_delay_ms(10);					// wait 10ms
 	digitalWrite(rstPin, HIGH); // Set RST HIGH, bring out of reset
 
 	// Display Init sequence for 64x48 OLED module
