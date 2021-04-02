@@ -140,30 +140,16 @@ typedef enum CMD
 	CMD_SETDRAWMODE	  //18
 } commCommand_t;
 
-typedef enum COMM_MODE
-{
-	MOLED_MODE_SPI,
-	MOLED_MODE_I2C,
-	MOLED_MODE_PARALLEL,
-	MOLED_MODE_UNDEFINED
-} micro_oled_mode;
-
-class MicroOLED : public Print
+/* Base class containing the common MicroOLED drawing code. The
+ * comm-specific code is in the derived classes, which are supplied
+ * through a template parameter (the Curiously Recursive Template
+ * Pattern). This avoids virtual dispatches.
+ */
+template<typename MicroOLED>
+class MicroOLEDBase : public Print
 {
 public:
-	// Constructor(s)
-	MicroOLED(uint8_t rst); // I2C - leaving the address currently undefined
-	MicroOLED(uint8_t rst, uint8_t dc); // I2C
-	MicroOLED(uint8_t rst, uint8_t dc, uint8_t cs); // SPI
-	MicroOLED(uint8_t rst, uint8_t dc, uint8_t cs, uint8_t wr, uint8_t rd,
-			  uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
-			  uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7); // Parallel
-
-	boolean begin(void); // Needed for backward-compatibility
-	boolean begin(uint8_t deviceAddress, TwoWire &wirePort); // User-defined I2C address and TwoWire
-	boolean begin(SPIClass &spiPort); // User-defined SPIClass
-
-	virtual size_t write(uint8_t); // Virtual - for I2C _or_ SPI
+        size_t write(uint8_t) override;
 
 	void enableDebugging(Stream &debugPort = Serial); //Turn on debug printing. If user doesn't specify then Serial will be used.
 
@@ -225,25 +211,14 @@ public:
 	void flipVertical(boolean flip);
 	void flipHorizontal(boolean flip);
 
-	//Control the size of the internal I2C transaction amount
-	void setI2CTransactionSize(uint8_t bufferSize);
-	uint8_t getI2CTransactionSize(void);
-
-	//Set the max number of bytes set in a given I2C transaction
-	uint8_t i2cTransactionSize = 32; //Default to ATmega328 limit
-
-private:
+protected:
 	uint8_t csPin, dcPin, rstPin;
-	uint8_t wrPin, rdPin, dPins[8];
 	volatile uint8_t *wrport, *wrreg, *rdport, *rdreg;
 	uint8_t wrpinmask, rdpinmask;
-	micro_oled_mode moled_interface = MOLED_MODE_UNDEFINED;
-	byte moled_i2c_address = I2C_ADDRESS_UNDEFINED;
 	volatile uint8_t *ssport, *dcport, *ssreg, *dcreg; // use volatile because these are fixed location port address
 	uint8_t mosipinmask, sckpinmask, sspinmask, dcpinmask;
 	uint8_t foreColor, drawMode, fontWidth, fontHeight, fontType, fontStartChar, fontTotalChar, cursorX, cursorY;
 	uint16_t fontMapWidth;
-	static const unsigned char *fontsPointer[];
 	void swapOLED(uint8_t *x, uint8_t *y);
 
 	//Debug
@@ -253,16 +228,95 @@ private:
 	void beginCommon(); // Functionality common to all begin methods
 
 	// Communication
-	void spiTransfer(byte data);
-	void spiSetup(SPIClass &spiPort = SPI);
-	void i2cSetup(uint8_t deviceAddress = I2C_ADDRESS_UNDEFINED, TwoWire &wirePort = Wire);
-	void i2cWrite(byte address, byte control, byte data);
-	boolean i2cWriteMultiple(byte address, uint8_t *dataBytes, size_t numDataBytes);
-	void parallelSetup();
-	void parallelWrite(byte data, byte dc);
-
-	TwoWire *_i2cPort;		//The generic connection to user's chosen I2C hardware
-
-	SPIClass *_spiPort;			 //The generic connection to user's chosen SPI hardware
 };
+
+class MicroOLED_SPI : public MicroOLEDBase<MicroOLED_SPI>
+{
+    friend class MicroOLEDBase<MicroOLED_SPI>;
+public:
+    MicroOLED_SPI(uint8_t rst, uint8_t dc, uint8_t cs);
+
+    boolean begin(void);  // Needed for backward-compatibility
+    boolean begin(SPIClass & spiPort);  // User-defined SPIClass
+
+private:
+    void command(uint8_t c);
+    void data(uint8_t c);
+    void constantData(uint8_t c, uint8_t n);
+    void multipleData(uint8_t * buf, uint8_t n);
+
+    void spiTransfer(byte data);
+    void spiSetup(SPIClass & spiPort = SPI);
+
+    SPIClass * _spiPort;  // The generic connection to user's chosen SPI hardware
+};
+
+class MicroOLED_I2C : public MicroOLEDBase<MicroOLED_I2C>
+{
+    friend class MicroOLEDBase<MicroOLED_I2C>;
+public:
+    MicroOLED_I2C(uint8_t rst);  // leaving the address currently undefined
+    MicroOLED_I2C(uint8_t rst, uint8_t dc);
+
+    boolean begin(void);  // Needed for backward-compatibility
+    boolean begin(uint8_t deviceAddress, TwoWire & wirePort);  // User-defined I2C address
+                                                               // and TwoWire
+
+    // Control the size of the internal I2C transaction amount
+    void    setI2CTransactionSize(uint8_t bufferSize);
+    uint8_t getI2CTransactionSize(void);
+
+    // Set the max number of bytes set in a given I2C transaction
+    uint8_t i2cTransactionSize = 32;  // Default to ATmega328 limit
+
+private:
+    void    i2cSetup(uint8_t   deviceAddress = I2C_ADDRESS_UNDEFINED,
+                     TwoWire & wirePort      = Wire);
+
+    void command(uint8_t c);
+    void data(uint8_t c);
+    void constantData(uint8_t c, uint8_t n);
+    void multipleData(uint8_t * buf, uint8_t n);
+
+    void    i2cWrite(byte address, byte control, byte data);
+    boolean i2cWriteMultiple(byte address, uint8_t * dataBytes, size_t numDataBytes);
+
+    byte moled_i2c_address = I2C_ADDRESS_UNDEFINED;
+
+    TwoWire * _i2cPort;  // The generic connection to user's chosen I2C hardware
+};
+
+class MicroOLED_Parallel : public MicroOLEDBase<MicroOLED_Parallel>
+{
+    friend class MicroOLEDBase<MicroOLED_Parallel>;
+public:
+    MicroOLED_Parallel(uint8_t rst,
+                       uint8_t dc,
+                       uint8_t cs,
+                       uint8_t wr,
+                       uint8_t rd,
+                       uint8_t d0,
+                       uint8_t d1,
+                       uint8_t d2,
+                       uint8_t d3,
+                       uint8_t d4,
+                       uint8_t d5,
+                       uint8_t d6,
+                       uint8_t d7);
+
+    boolean begin(void);  // Needed for backward-compatibility
+
+private:
+    uint8_t wrPin, rdPin;
+    uint8_t dPins[8];
+
+    void command(uint8_t c);
+    void data(uint8_t c);
+    void constantData(uint8_t c, uint8_t n);
+    void multipleData(uint8_t * buf, uint8_t n);
+
+    void parallelSetup();
+    void parallelWrite(byte data, byte dc);
+};
+
 #endif
