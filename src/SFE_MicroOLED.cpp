@@ -65,18 +65,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "util/fontlargeletter31x48.h"
 
 // Change the total fonts included
-#ifdef INCLUDE_LARGE_LETTER_FONT
 #define TOTALFONTS 5
-#else
-#define TOTALFONTS 4
-#endif
 
-// Add the font name as declared in the header file.  Remove as many as possible to conserve FLASH memory.
+// Add the font name as declared in the header file.  Remove as many
+// as possible to conserve FLASH memory.
 const unsigned char *MicroOLED::fontsPointer[] = {
-	font5x7, font8x16, sevensegment, fontlargenumber
+#if INCLUDE_FONT0
+	font5x7,
+#else
+            0x0,
+#endif
+#if INCLUDE_FONT1
+	font8x16,
+#else
+            0x0,
+#endif
+#if INCLUDE_FONT2
+	sevensegment,
+#else
+            0x0,
+#endif
+#if INCLUDE_FONT3
+            fontlargenumber,
+#else
+            0x0,
+#endif
 #ifdef INCLUDE_LARGE_LETTER_FONT
-	,
 	fontlargeletter31x48
+#else
+            0x0
 #endif
 };
 
@@ -1017,8 +1034,8 @@ uint8_t MicroOLED::getFontType(void)
 */
 uint8_t MicroOLED::setFontType(uint8_t type)
 {
-	if ((type >= TOTALFONTS) || (type < 0))
-		return false;
+    if ((type >= TOTALFONTS) || !fontsPointer[type])
+        return false;
 
 	fontType = type;
 	fontWidth = pgm_read_byte(fontsPointer[fontType] + 0);
