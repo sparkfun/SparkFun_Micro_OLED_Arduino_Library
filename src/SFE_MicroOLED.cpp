@@ -59,8 +59,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "util/fontlargenumber.h"	// Comment this line if you do not need the large number font
 #include "util/7segment.h"			// Comment this line if you do not need the 7segment font
 // The 31x48 font is handy, but uses a big chunk of flash memory - about 7k.
-// If you want to save memory, comment out the line below:
-#include "util/fontlargeletter31x48.h"
+// If you want to use this font, uncomment the line below:
+//#include "util/fontlargeletter31x48.h"
 
 #define MAXFONTS 5 // Do not change this line
 
