@@ -41,7 +41,7 @@ void setup()
   // This is the new way of initializing the OLED.
   // We can pass a different I2C address and TwoWire port
   // If 0x3D does not work, try 0x3C
-  oled.begin(0x3C, Wire);    // Initialize the OLED
+  oled.begin(0x3D, Wire);    // Initialize the OLED
 
   // Print the total number of fonts loaded into memory
   Serial.print(F("There are "));
