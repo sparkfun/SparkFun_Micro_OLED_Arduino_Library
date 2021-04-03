@@ -25,7 +25,7 @@ https://github.com/emil01/SparkFun_Micro_OLED_Arduino_Library/
 #define FONT8X16_H
 
 #if defined(ARDUINO_ARCH_MBED)
-	// ARDUINO_ARCH_MBED (APOLLO3 v2) does not support or require pgmspace.h
+	// ARDUINO_ARCH_MBED (APOLLO3 v2) does not support or require pgmspace.h / PROGMEM
 	static const unsigned char font8x16[] = {
 #elif defined(__AVR__) || defined(__arm__) || defined(__ARDUINO_ARC__)
 	#include <avr/pgmspace.h>

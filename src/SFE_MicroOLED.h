@@ -45,7 +45,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <SPI.h> // Needed for SPIClass - even if we are using I2C or Parallel
 
 #if defined(ARDUINO_ARCH_MBED)
-	// ARDUINO_ARCH_MBED (APOLLO3 v2) does not support or require pgmspace.h
+	// ARDUINO_ARCH_MBED (APOLLO3 v2) does not support or require pgmspace.h / PROGMEM
 #elif defined(__AVR__) || defined(__arm__) || defined(__ARDUINO_ARC__)
 	#include <avr/pgmspace.h>
 #else
