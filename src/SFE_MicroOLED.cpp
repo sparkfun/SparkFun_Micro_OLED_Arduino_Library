@@ -34,10 +34,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
 #include <Arduino.h>
-#if defined(__AVR__) || defined(__arm__) || defined(__ARDUINO_ARC__)
-#include <avr/pgmspace.h>
+#if defined(ARDUINO_ARCH_MBED)
+	// ARDUINO_ARCH_MBED (APOLLO3 v2) does not support or require pgmspace.h
+#elif defined(__AVR__) || defined(__arm__) || defined(__ARDUINO_ARC__)
+	#include <avr/pgmspace.h>
 #else
-#include <pgmspace.h>
+	#include <pgmspace.h>
 #endif
 #include <SFE_MicroOLED.h>
 
