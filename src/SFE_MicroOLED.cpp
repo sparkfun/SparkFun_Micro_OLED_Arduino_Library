@@ -47,53 +47,50 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define _BV(x) (1 << x)
 #endif
 
-// The 31x48 font is handy, but uses a big chunk of flash memory - about 7k.
-// If you want to use font 4 in your sketch, uncomment out the line below:
-//#define INCLUDE_LARGE_LETTER_FONT
-
 // This fixed ugly GCC warning "only initialized variables can be placed into program memory area"
 #if defined(__AVR__)
 #undef PROGMEM
 #define PROGMEM __attribute__((section(".progmem.data")))
 #endif
 
-// Add header of the fonts here.  Remove as many as possible to conserve FLASH memory.
-#include "util/font5x7.h"
-#include "util/font8x16.h"
-#include "util/fontlargenumber.h"
-#include "util/7segment.h"
+// Add header of the fonts here.  Comment as many as possible to conserve FLASH memory.
+#include "util/font5x7.h"			// Comment this line if you do not need the 5x7 font
+#include "util/font8x16.h"			// Comment this line if you do not need the 8x16 font
+#include "util/fontlargenumber.h"	// Comment this line if you do not need the large number font
+#include "util/7segment.h"			// Comment this line if you do not need the 7segment font
+// The 31x48 font is handy, but uses a big chunk of flash memory - about 7k.
+// If you want to save memory, comment out the line below:
 #include "util/fontlargeletter31x48.h"
 
-// Change the total fonts included
-#define TOTALFONTS 5
+#define MAXFONTS 5 // Do not change this line
 
 // Add the font name as declared in the header file.  Remove as many
 // as possible to conserve FLASH memory.
 const unsigned char *MicroOLED::fontsPointer[] = {
-#if INCLUDE_FONT0
+#ifdef FONT5X7_H
 	font5x7,
 #else
-            0x0,
+    0x0,
 #endif
-#if INCLUDE_FONT1
+#ifdef FONT8X16_H
 	font8x16,
 #else
-            0x0,
+    0x0,
 #endif
-#if INCLUDE_FONT2
+#ifdef FONT7SEGMENT_H
 	sevensegment,
 #else
-            0x0,
+    0x0,
 #endif
-#if INCLUDE_FONT3
-            fontlargenumber,
+#ifdef FONTLARGENUMBER_H
+    fontlargenumber,
 #else
-            0x0,
+    0x0,
 #endif
-#ifdef INCLUDE_LARGE_LETTER_FONT
+#ifdef FONTLARGELETTER31X48_H
 	fontlargeletter31x48
 #else
-            0x0
+    0x0
 #endif
 };
 
@@ -1016,7 +1013,13 @@ uint8_t MicroOLED::getFontTotalChar(void)
 */
 uint8_t MicroOLED::getTotalFonts(void)
 {
-	return TOTALFONTS;
+	uint8_t totalFonts = 0;
+	for (uint8_t thisFont = 0; thisFont < MAXFONTS; thisFont++)
+	{
+		if (fontsPointer[thisFont] > 0)
+			totalFonts++;
+	}
+	return (totalFonts);
 }
 
 /** \brief Get font type.
@@ -1034,7 +1037,7 @@ uint8_t MicroOLED::getFontType(void)
 */
 uint8_t MicroOLED::setFontType(uint8_t type)
 {
-    if ((type >= TOTALFONTS) || !fontsPointer[type])
+    if ((type >= MAXFONTS) || !fontsPointer[type])
         return false;
 
 	fontType = type;
