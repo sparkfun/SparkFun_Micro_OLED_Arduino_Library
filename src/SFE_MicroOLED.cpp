@@ -53,41 +53,60 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define PROGMEM __attribute__((section(".progmem.data")))
 #endif
 
-// Add header of the fonts here.  Comment as many as possible to conserve FLASH memory.
-#include "util/font5x7.h"			// Comment this line if you do not need the 5x7 font
-#include "util/font8x16.h"			// Comment this line if you do not need the 8x16 font
-#include "util/fontlargenumber.h"	// Comment this line if you do not need the large number font
-#include "util/7segment.h"			// Comment this line if you do not need the 7segment font
-// The 31x48 font is handy, but uses a big chunk of flash memory - about 7k.
-// If you want to use this font, uncomment the line below:
-//#include "util/fontlargeletter31x48.h"
+// Add header of the fonts here. Fonts that aren't included below are
+// eliminated by the compiler.
+#include "util/font5x7.h"
+#include "util/font8x16.h"
+#include "util/fontlargenumber.h"
+#include "util/7segment.h"
+#include "util/fontlargeletter31x48.h"
 
 #define MAXFONTS 5 // Do not change this line
+
+// To save flash memory, change these to zeros for the fonts you do
+// not want.  In particular, the 31x48 font is handy, but uses a big
+// chunk of flash memory - about 7k. It is excluded by default.
+#ifndef INCLUDE_FONT_5x7
+#define INCLUDE_FONT_5x7 1
+#endif
+#ifndef INCLUDE_FONT_8x16
+#define INCLUDE_FONT_8x16 1
+#endif
+#ifndef INCLUDE_FONT_7SEG
+#define INCLUDE_FONT_7SEG 1
+#endif
+#ifndef INCLUDE_FONT_LARGENUMBER
+#define INCLUDE_FONT_LARGENUMBER 1
+#endif
+#ifndef INCLUDE_FONT_LARGELETTER
+#define INCLUDE_FONT_LARGELETTER 0
+#endif
+
 
 // Add the font name as declared in the header file.  Remove as many
 // as possible to conserve FLASH memory.
 const unsigned char *MicroOLED::fontsPointer[] = {
-#ifdef FONT5X7_H
+#if INCLUDE_FONT_5x7
 	font5x7,
 #else
     0x0,
 #endif
-#ifdef FONT8X16_H
+#if INCLUDE_FONT_8x16
 	font8x16,
 #else
     0x0,
 #endif
-#ifdef FONT7SEGMENT_H
+#if INCLUDE_FONT_7SEG
 	sevensegment,
 #else
     0x0,
 #endif
-#ifdef FONTLARGENUMBER_H
+#if INCLUDE_FONT_LARGENUMBER
     fontlargenumber,
 #else
     0x0,
 #endif
-#ifdef FONTLARGELETTER31X48_H
+#if INCLUDE_FONT_LARGELETTER
 	fontlargeletter31x48
 #else
     0x0
