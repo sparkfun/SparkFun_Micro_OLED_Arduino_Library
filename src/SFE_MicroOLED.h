@@ -44,10 +44,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <Wire.h> // Needed for TwoWire - even if we are using SPI or Parallel
 #include <SPI.h> // Needed for SPIClass - even if we are using I2C or Parallel
 
-#if defined(__AVR__) || defined(__arm__) || defined(__ARDUINO_ARC__)
-#include <avr/pgmspace.h>
+#if defined(ARDUINO_ARCH_MBED)
+	// ARDUINO_ARCH_MBED (APOLLO3 v2) does not support or require pgmspace.h / PROGMEM
+#elif defined(__AVR__) || defined(__arm__) || defined(__ARDUINO_ARC__)
+	#include <avr/pgmspace.h>
 #else
-#include <pgmspace.h>
+	#include <pgmspace.h>
 #endif
 
 #define I2C_ADDRESS_SA0_0 0b0111100

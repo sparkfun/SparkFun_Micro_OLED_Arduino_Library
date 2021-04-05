@@ -25,14 +25,17 @@ https://github.com/emil01/SparkFun_Micro_OLED_Arduino_Library/
 #ifndef FONT5X7_H
 #define FONT5X7_H
 
-#if defined(__AVR__) || defined(__arm__) || defined(__ARDUINO_ARC__)
+// Standard ASCII 5x7 font
+#if defined(ARDUINO_ARCH_MBED)
+	// ARDUINO_ARCH_MBED (APOLLO3 v2) does not support or require pgmspace.h / PROGMEM
+	static const unsigned char font5x7[] = {
+#elif defined(__AVR__) || defined(__arm__) || defined(__ARDUINO_ARC__)
 	#include <avr/pgmspace.h>
+	static const unsigned char font5x7[] PROGMEM = {
 #else
 	#include <pgmspace.h>
+	static const unsigned char font5x7[] PROGMEM = {
 #endif
-
-// Standard ASCII 5x7 font
-static const unsigned char font5x7[] PROGMEM = {
 	// first row defines - FONTWIDTH, FONTHEIGHT, ASCII START CHAR, TOTAL CHARACTERS, FONT MAP WIDTH HIGH, FONT MAP WIDTH LOW (2,56 meaning 256)
 	5,8,0,255,12,75,
 	0x00, 0x00, 0x00, 0x00, 0x00,

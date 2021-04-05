@@ -34,10 +34,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
 #include <Arduino.h>
-#if defined(__AVR__) || defined(__arm__) || defined(__ARDUINO_ARC__)
-#include <avr/pgmspace.h>
+#if defined(ARDUINO_ARCH_MBED)
+	// ARDUINO_ARCH_MBED (APOLLO3 v2) does not support or require pgmspace.h / PROGMEM
+#elif defined(__AVR__) || defined(__arm__) || defined(__ARDUINO_ARC__)
+	#include <avr/pgmspace.h>
 #else
-#include <pgmspace.h>
+	#include <pgmspace.h>
 #endif
 #include <SFE_MicroOLED.h>
 
@@ -45,36 +47,72 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define _BV(x) (1 << x)
 #endif
 
-// The 31x48 font is handy, but uses a big chunk of flash memory - about 7k.
-// If you want to use font 4 in your sketch, uncomment out the line below:
-//#define INCLUDE_LARGE_LETTER_FONT
-
 // This fixed ugly GCC warning "only initialized variables can be placed into program memory area"
 #if defined(__AVR__)
 #undef PROGMEM
 #define PROGMEM __attribute__((section(".progmem.data")))
 #endif
 
-// Add header of the fonts here.  Remove as many as possible to conserve FLASH memory.
-#include "util/font5x7.h"
-#include "util/font8x16.h"
-#include "util/fontlargenumber.h"
-#include "util/7segment.h"
-#include "util/fontlargeletter31x48.h"
+// Add header of the fonts here.
+// Fonts that aren't included the section below are excluded by the compiler.
+#include "util/font5x7.h"				// Font 0
+#include "util/font8x16.h"				// Font 1
+#include "util/7segment.h"				// Font 2
+#include "util/fontlargenumber.h"		// Font 3
+#include "util/fontlargeletter31x48.h"	// Font 4 (excluded by default - see below)
 
-// Change the total fonts included
-#ifdef INCLUDE_LARGE_LETTER_FONT
-#define TOTALFONTS 5
-#else
-#define TOTALFONTS 4
+#define MAXFONTS 5 // Do not change this line - except when _adding_ new fonts
+
+// To save flash memory, change these to zeros for the fonts you want to exclude.
+// In particular, the 31x48 font is handy, but uses a big
+// chunk of flash memory - about 7k. It is excluded by default.
+//
+// If you are compiling the code using your own makefile, you can use compiler flags to include 
+// or exclude individual fonts. E.g.:  -DINCLUDE_FONT_LARGELETTER=1  or  -DINCLUDE_FONT_LARGENUMBER=0
+#ifndef INCLUDE_FONT_5x7
+#define INCLUDE_FONT_5x7 1			// Change this to 0 to exclude the 5x7 font
+#endif
+#ifndef INCLUDE_FONT_8x16
+#define INCLUDE_FONT_8x16 1			// Change this to 0 to exclude the 8x16 font
+#endif
+#ifndef INCLUDE_FONT_7SEG
+#define INCLUDE_FONT_7SEG 1			// Change this to 0 to exclude the seven segment font
+#endif
+#ifndef INCLUDE_FONT_LARGENUMBER
+#define INCLUDE_FONT_LARGENUMBER 1	// Change this to 0 to exclude the large number font
+#endif
+#ifndef INCLUDE_FONT_LARGELETTER
+#define INCLUDE_FONT_LARGELETTER 0	// Change this to 1 to include the large letter font
 #endif
 
-// Add the font name as declared in the header file.  Remove as many as possible to conserve FLASH memory.
+
+// Add the font name as declared in the header file.
+// Exclude as many as possible to conserve FLASH memory.
 const unsigned char *MicroOLED::fontsPointer[] = {
-	font5x7, font8x16, sevensegment, fontlargenumber
-#ifdef INCLUDE_LARGE_LETTER_FONT
-	,
+#if INCLUDE_FONT_5x7
+	font5x7,
+#else
+    NULL,
+#endif
+#if INCLUDE_FONT_8x16
+	font8x16,
+#else
+    NULL,
+#endif
+#if INCLUDE_FONT_7SEG
+	sevensegment,
+#else
+    NULL,
+#endif
+#if INCLUDE_FONT_LARGENUMBER
+    fontlargenumber,
+#else
+    NULL,
+#endif
+#if INCLUDE_FONT_LARGELETTER
 	fontlargeletter31x48
+#else
+    NULL
 #endif
 };
 
@@ -997,7 +1035,13 @@ uint8_t MicroOLED::getFontTotalChar(void)
 */
 uint8_t MicroOLED::getTotalFonts(void)
 {
-	return TOTALFONTS;
+	uint8_t totalFonts = 0;
+	for (uint8_t thisFont = 0; thisFont < MAXFONTS; thisFont++)
+	{
+		if (fontsPointer[thisFont] != NULL)
+			totalFonts++;
+	}
+	return (totalFonts);
 }
 
 /** \brief Get font type.
@@ -1015,8 +1059,8 @@ uint8_t MicroOLED::getFontType(void)
 */
 uint8_t MicroOLED::setFontType(uint8_t type)
 {
-	if ((type >= TOTALFONTS) || (type < 0))
-		return false;
+    if ((type >= MAXFONTS) || (fontsPointer[type] == NULL))
+        return false;
 
 	fontType = type;
 	fontWidth = pgm_read_byte(fontsPointer[fontType] + 0);
