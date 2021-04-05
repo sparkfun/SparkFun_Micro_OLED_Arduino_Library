@@ -53,63 +53,66 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define PROGMEM __attribute__((section(".progmem.data")))
 #endif
 
-// Add header of the fonts here. Fonts that aren't included below are
-// eliminated by the compiler.
-#include "util/font5x7.h"
-#include "util/font8x16.h"
-#include "util/fontlargenumber.h"
-#include "util/7segment.h"
-#include "util/fontlargeletter31x48.h"
+// Add header of the fonts here.
+// Fonts that aren't included the section below are excluded by the compiler.
+#include "util/font5x7.h"				// Font 0
+#include "util/font8x16.h"				// Font 1
+#include "util/7segment.h"				// Font 2
+#include "util/fontlargenumber.h"		// Font 3
+#include "util/fontlargeletter31x48.h"	// Font 4 (excluded by default - see below)
 
-#define MAXFONTS 5 // Do not change this line
+#define MAXFONTS 5 // Do not change this line - except when _adding_ new fonts
 
-// To save flash memory, change these to zeros for the fonts you do
-// not want.  In particular, the 31x48 font is handy, but uses a big
+// To save flash memory, change these to zeros for the fonts you want to exclude.
+// In particular, the 31x48 font is handy, but uses a big
 // chunk of flash memory - about 7k. It is excluded by default.
+//
+// If you are compiling the code using your own makefile, you can use compiler flags to include 
+// or exclude individual fonts. E.g.:  -DINCLUDE_FONT_LARGELETTER=1  or  -DINCLUDE_FONT_LARGENUMBER=0
 #ifndef INCLUDE_FONT_5x7
-#define INCLUDE_FONT_5x7 1
+#define INCLUDE_FONT_5x7 1			// Change this to 0 to exclude the 5x7 font
 #endif
 #ifndef INCLUDE_FONT_8x16
-#define INCLUDE_FONT_8x16 1
+#define INCLUDE_FONT_8x16 1			// Change this to 0 to exclude the 8x16 font
 #endif
 #ifndef INCLUDE_FONT_7SEG
-#define INCLUDE_FONT_7SEG 1
+#define INCLUDE_FONT_7SEG 1			// Change this to 0 to exclude the seven segment font
 #endif
 #ifndef INCLUDE_FONT_LARGENUMBER
-#define INCLUDE_FONT_LARGENUMBER 1
+#define INCLUDE_FONT_LARGENUMBER 1	// Change this to 0 to exclude the large number font
 #endif
 #ifndef INCLUDE_FONT_LARGELETTER
-#define INCLUDE_FONT_LARGELETTER 0
+#define INCLUDE_FONT_LARGELETTER 0	// Change this to 1 to include the large letter font
 #endif
 
 
-// Add the font name as declared in the header file.  Remove as many
-// as possible to conserve FLASH memory.
+// Add the font name as declared in the header file.
+// Exclude as many as possible to conserve FLASH memory.
 const unsigned char *MicroOLED::fontsPointer[] = {
 #if INCLUDE_FONT_5x7
 	font5x7,
 #else
-    0x0,
+    NULL,
 #endif
 #if INCLUDE_FONT_8x16
 	font8x16,
 #else
-    0x0,
+    NULL,
 #endif
 #if INCLUDE_FONT_7SEG
 	sevensegment,
 #else
-    0x0,
+    NULL,
 #endif
 #if INCLUDE_FONT_LARGENUMBER
     fontlargenumber,
 #else
-    0x0,
+    NULL,
 #endif
 #if INCLUDE_FONT_LARGELETTER
 	fontlargeletter31x48
 #else
-    0x0
+    NULL
 #endif
 };
 
@@ -1035,7 +1038,7 @@ uint8_t MicroOLED::getTotalFonts(void)
 	uint8_t totalFonts = 0;
 	for (uint8_t thisFont = 0; thisFont < MAXFONTS; thisFont++)
 	{
-		if (fontsPointer[thisFont] > 0)
+		if (fontsPointer[thisFont] != NULL)
 			totalFonts++;
 	}
 	return (totalFonts);
@@ -1056,7 +1059,7 @@ uint8_t MicroOLED::getFontType(void)
 */
 uint8_t MicroOLED::setFontType(uint8_t type)
 {
-    if ((type >= MAXFONTS) || !fontsPointer[type])
+    if ((type >= MAXFONTS) || (fontsPointer[type] == NULL))
         return false;
 
 	fontType = type;

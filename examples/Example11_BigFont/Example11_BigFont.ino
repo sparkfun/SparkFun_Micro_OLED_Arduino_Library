@@ -5,8 +5,10 @@
 
   This sketch demonstrates how to use the Large Letter 31x48 font.
   This font is disabled by default. To enable it, you need to edit
-  SFE_MicroOLED.cpp and uncomment the line which says:
-  #include "util/fontlargeletter31x48.h"
+  SFE_MicroOLED.cpp and change line 85 (or thereabouts) from:
+  #define INCLUDE_FONT_LARGELETTER 0
+  to:
+  #define INCLUDE_FONT_LARGELETTER 1
 
   Hardware Connections:
     This example assumes you are using Qwiic. See the SPI examples for
@@ -58,7 +60,7 @@ void setup()
   if (oled.setFontType(4) == 0)  // Set font to type 4 (fontlargeletter31x48)
   {
     Serial.println(F("Could not enable font 4 (fontlargeletter31x48)!"));
-    Serial.println(F("Have you uncommented #include \"util/fontlargeletter31x48.h\" in SFE_MicroOLED.cpp?"));
+    Serial.println(F("Have you changed the #define INCLUDE_FONT_LARGELETTER to 1 in SFE_MicroOLED.cpp?"));
     Serial.println(F("Freezing..."));
     while (1)
       ; // Do nothing more
