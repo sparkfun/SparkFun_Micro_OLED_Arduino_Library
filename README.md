@@ -101,6 +101,7 @@ Please see [this example](./examples/SPI/MicroOLED_Demo_v13/MicroOLED_Demo_v13.i
 Version History
 ---------------
 
+* [v 1.3.2](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.3.2) - adds support for APOLLO3 v2, allow fonts to be included/excluded individually
 * [v 1.3.0](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.3.0) - adding support for non-standard I<sup>2</sup>C and SPI ports
 * [v 1.2.10](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.10) - prevent-write-outside-buffer corrections; improved I2C transfer speeds; includes the missing scroll functions; ```line``` corrections; ```enableDebugging```.
 * [v 1.2.9](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library/releases/tag/v1.2.9) - drawIcon() correction
