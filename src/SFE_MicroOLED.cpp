@@ -625,7 +625,7 @@ Draw color pixel in the screen buffer's x,y position with NORM or XOR draw mode.
 */
 void MicroOLED::pixel(uint8_t x, uint8_t y, uint8_t color, uint8_t mode)
 {
-	if ((x < 0) || (x >= LCDWIDTH) || (y < 0) || (y >= LCDHEIGHT))
+	if ((x >= LCDWIDTH) || (y >= LCDHEIGHT))
 		return;
 
 	if (mode == XOR)
@@ -1059,7 +1059,9 @@ uint8_t MicroOLED::getFontType(void)
 */
 uint8_t MicroOLED::setFontType(uint8_t type)
 {
-    if ((type >= MAXFONTS) || (fontsPointer[type] == NULL))
+    if (type >= MAXFONTS)
+		return false;
+	if (fontsPointer[type] == NULL)
         return false;
 
 	fontType = type;
@@ -1313,6 +1315,8 @@ void MicroOLED::drawBitmap(uint8_t *bitArray)
 //Use http://en.radzio.dxp.pl/bitmap_converter/ to generate output
 //Make sure the bitmap is n*8 pixels tall (pad white pixels to lower area as needed)
 //Otherwise the bitmap bitmap_converter will compress some of the bytes together
+//TO DO: fix compiler warning re. iconHeight being unused. Maybe use it to check if
+//       the icon will fit on the screen?
 void MicroOLED::drawIcon(uint8_t offsetX, uint8_t offsetY, uint8_t iconWidth, uint8_t iconHeight, uint8_t *bitArray, uint8_t arraySizeInBytes, bool overwrite)
 {
 	uint8_t columnNumber = offsetX;

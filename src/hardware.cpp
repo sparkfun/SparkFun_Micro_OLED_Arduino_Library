@@ -116,7 +116,7 @@ boolean MicroOLED::i2cWriteMultiple(uint8_t address, uint8_t *dataBytes, size_t 
   while (bytesLeftToWrite > 0)
   {
     size_t bytesToWrite; // Limit bytesToWrite to i2cTransactionSize
-    if (bytesLeftToWrite > (i2cTransactionSize - 1))
+    if (bytesLeftToWrite > ((size_t)i2cTransactionSize - 1))
       bytesToWrite = i2cTransactionSize - 1;
     else
       bytesToWrite = bytesLeftToWrite;
