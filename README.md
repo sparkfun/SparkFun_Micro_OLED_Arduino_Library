@@ -27,7 +27,8 @@ Documentation
 
 * **[Installing an Arduino Library Guide](https://learn.sparkfun.com/tutorials/installing-an-arduino-library)** - Basic information on how to install an Arduino library.
 * **[Product Repository](https://github.com/sparkfun/Micro_OLED_Breakout)** - Main repository (including hardware files) for the Micro OLED Breakout.
-* **[Hookup Guide](https://learn.sparkfun.com/tutorials/micro-oled-breakout-hookup-guide)** - Basic hookup guide for the Micro OLED Breakout.
+* **[Hookup Guide](https://learn.sparkfun.com/tutorials/micro-oled-breakout-hookup-guide)** - Hookup guide for the Micro OLED Breakout.
+* **[Hookup Guide (Qwiic version)](https://learn.sparkfun.com/tutorials/718)** - Hookup guide for the Micro OLED Breakout (Qwiic).
 
 Products that use this Library
 ---------------------------------
