@@ -306,7 +306,7 @@ boolean MicroOLED::begin(uint8_t deviceAddress, TwoWire &wirePort)
 	return (true);
 }
 
-/** \brief Initialisation of MicroOLED Library - common to all begin methods. PRIVATE.
+/** \brief Initialisation of MicroOLED Library - common to all begin methods.
 
     Setup IO pins for the chosen interface then send initialisation commands to the SSD1306 controller inside the OLED.
 */
@@ -318,17 +318,31 @@ void MicroOLED::beginCommon()
 	setDrawMode(NORM);
 	setCursor(0, 0);
 
-	// Display reset routine
-	pinMode(rstPin, OUTPUT);	// Set RST pin as OUTPUT
-	digitalWrite(rstPin, HIGH); // Initially set RST HIGH
-	delay(5);					// VDD (3.3V) goes high at start, lets just chill for 5 ms
-	digitalWrite(rstPin, LOW);	// Bring RST low, reset the display
-	delay(10);					// wait 10ms
-	digitalWrite(rstPin, HIGH); // Set RST HIGH, bring out of reset
+	if(rstPin != 255)
+	{
+		// Display reset routine
+		pinMode(rstPin, OUTPUT);	// Set RST pin as OUTPUT
+		digitalWrite(rstPin, HIGH); // Initially set RST HIGH
+		delay(5);					// VDD (3.3V) goes high at start, lets just chill for 5 ms
+		digitalWrite(rstPin, LOW);	// Bring RST low, reset the display
+		delay(10);					// wait 10ms
+		digitalWrite(rstPin, HIGH); // Set RST HIGH, bring out of reset
+	}
 
 	// Display Init sequence for 64x48 OLED module
 	command(DISPLAYOFF); // 0xAE
 
+	initDisplay();
+
+	command(DISPLAYON); //--turn on oled panel
+}
+
+/** \brief Set CGRAM and display settings
+
+    Set the unique SSD1306 settings for the MicroOLED setup.
+*/
+void MicroOLED::initDisplay(bool clearDisplay)
+{
 	command(SETDISPLAYCLOCKDIV); // 0xD5
 	command(0x80);				 // the suggested ratio 0x80
 
@@ -361,8 +375,8 @@ void MicroOLED::beginCommon()
 	command(SETVCOMDESELECT); // 0xDB
 	command(0x40);
 
-	command(DISPLAYON); //--turn on oled panel
-	clear(ALL);			// Erase hardware memory inside the OLED controller to avoid random data in memory.
+	if(clearDisplay)
+		clear(ALL);			// Erase hardware memory inside the OLED controller to avoid random data in memory.
 }
 
 //Calling this function with nothing sets the debug port to Serial
