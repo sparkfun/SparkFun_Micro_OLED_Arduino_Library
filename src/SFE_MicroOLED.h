@@ -152,7 +152,7 @@ class MicroOLED : public Print
 {
 public:
 	// Constructor(s)
-	MicroOLED(uint8_t rst); // I2C - leaving the address currently undefined
+	MicroOLED(uint8_t rst = 255); // I2C - leaving the address currently undefined
 	MicroOLED(uint8_t rst, uint8_t dc); // I2C
 	MicroOLED(uint8_t rst, uint8_t dc, uint8_t cs); // SPI
 	MicroOLED(uint8_t rst, uint8_t dc, uint8_t cs, uint8_t wr, uint8_t rd,
@@ -231,6 +231,8 @@ public:
 
 	//Set the max number of bytes set in a given I2C transaction
 	uint8_t i2cTransactionSize = 32; //Default to ATmega328 limit
+
+	void initDisplay(bool clearDisplay = true); //Set CGRAM settings. Useful if display gets corrupt.
 
 private:
 	uint8_t csPin, dcPin, rstPin;
